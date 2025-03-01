@@ -36,6 +36,19 @@ import { LoadingSpinner } from '@/components/ui/loading-spinner'
 import { NavbarLoading } from './loading'
 import { NavigationItem } from './NavigationItem'
 import { motion, AnimatePresence } from 'framer-motion'
+import {
+  BookOpenText,
+  Download,
+  FileCog,
+  FileCog2,
+  FileCog2Icon,
+  Flag,
+  InstagramIcon,
+  LucideFlag,
+  LucideInstagram,
+  RefreshCcwDot,
+  Send,
+} from 'lucide-react'
 
 export default function Navbar() {
   const [open, setOpen] = React.useState(false)
@@ -51,12 +64,12 @@ export default function Navbar() {
   }
 
   return (
-    <div className="container mx-auto flex h-16 items-center px-4 sm:px-6">
+    <div className="border-b border-border container mx-auto flex h-16 items-center px-4 sm:px-6">
       <div className="flex w-1/8 sm:w-1/3">
         <Link href="/">
           <div className="flex items-center space-x-2 ml-4 sm:ml-8">
-            <Instagram className="" />
-            <span className="text-lg font-bold text-foreground text-2xl">
+            <LucideInstagram className="" />
+            <span className="text-lg font-normal text-foreground text-2xl">
               Instafel
             </span>
           </div>
@@ -67,9 +80,9 @@ export default function Navbar() {
         <NavigationMenu className="hidden md:flex">
           <NavigationMenuList className="gap-2">
             <AnimatePresence>
-              {SITE_CONFIG.navItems.map(
-                (link) =>
-                  link.title !== 'Telegram' && (
+              {SITE_CONFIG.navItems.map((link) => {
+                if (link.title === 'Backup Library') {
+                  return (
                     <motion.div
                       key={link.href}
                       initial={{ opacity: 0, y: -10 }}
@@ -79,12 +92,47 @@ export default function Navbar() {
                     >
                       <NavigationItem
                         href={link.href}
-                        title={link.title}
+                        title="Backups"
                         isActive={pathname === link.href}
                       />
                     </motion.div>
                   )
-              )}
+                }
+
+                if (link.title === 'Flag Library') {
+                  return (
+                    <motion.div
+                      key={link.href}
+                      initial={{ opacity: 0, y: -10 }}
+                      animate={{ opacity: 1, y: 0 }}
+                      exit={{ opacity: 0, y: -10 }}
+                      transition={{ duration: 0.2 }}
+                    >
+                      <NavigationItem
+                        href={link.href}
+                        title="Flags"
+                        isActive={pathname === link.href}
+                      />
+                    </motion.div>
+                  )
+                }
+
+                return (
+                  <motion.div
+                    key={link.href}
+                    initial={{ opacity: 0, y: -10 }}
+                    animate={{ opacity: 1, y: 0 }}
+                    exit={{ opacity: 0, y: -10 }}
+                    transition={{ duration: 0.2 }}
+                  >
+                    <NavigationItem
+                      href={link.href}
+                      title={link.title}
+                      isActive={pathname === link.href}
+                    />
+                  </motion.div>
+                )
+              })}
             </AnimatePresence>
           </NavigationMenuList>
         </NavigationMenu>
@@ -93,7 +141,7 @@ export default function Navbar() {
       <div className="flex w-1/4 sm:w-1/3 justify-end items-center space-x-4">
         <ThemeToggle />
         <Link href="https://t.me/instafel">
-          <Telegram className="h-[1.4rem] w-[1.4rem]" />
+          <Send className="h-[1.2rem] w-[1.2rem]" />
         </Link>
         <Sheet open={open} onOpenChange={setOpen}>
           <SheetTrigger asChild>
@@ -114,7 +162,6 @@ export default function Navbar() {
               className="border-b border-border p-6"
             >
               <div className="flex items-center space-x-2">
-                <Instagram className="" />
                 <span className="text-lg font-bold text-foreground text-2xl">
                   Instafel
                 </span>
@@ -141,7 +188,22 @@ export default function Navbar() {
                             : 'text-foreground'
                         }`}
                       >
-                        <IflGuide />
+                        <BookOpenText />
+                        <span>{link.title}</span>
+                      </Link>
+                    )}
+                    {link.title === 'Updater' && (
+                      <Link
+                        href={link.href}
+                        onClick={() => setOpen(false)}
+                        className={`flex items-center space-x-3 rounded-lg px-4 py-3 text-sm font-medium transition-all duration-200 hover:bg-accent hover:text-accent-foreground hover:translate-x-1
+                        ${
+                          isActive
+                            ? 'bg-accent text-accent-foreground'
+                            : 'text-foreground'
+                        }`}
+                      >
+                        <RefreshCcwDot />
                         <span>{link.title}</span>
                       </Link>
                     )}
@@ -156,7 +218,7 @@ export default function Navbar() {
                               : 'text-foreground'
                           }`}
                       >
-                        <IflLibraryFlag />
+                        <LucideFlag />
                         <span>{link.title}</span>
                       </Link>
                     )}
@@ -171,7 +233,7 @@ export default function Navbar() {
                               : 'text-foreground'
                           }`}
                       >
-                        <IflLibraryBackup />
+                        <FileCog2Icon />
                         <span>{link.title}</span>
                       </Link>
                     )}
@@ -201,7 +263,7 @@ export default function Navbar() {
                               : 'text-foreground'
                           }`}
                       >
-                        <IflDownload />
+                        <Download />
                         <span>{link.title}</span>
                       </Link>
                     )}

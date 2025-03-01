@@ -66,7 +66,7 @@ export const SITE_CONFIG = {
     },
     {
       platform: 'Telegram',
-      username: 'mamiiblt',
+      username: 'instafel',
       baseUrl: 'https://t.me/',
     },
     {
@@ -93,7 +93,7 @@ export const SITE_CONFIG = {
   navItems: [
     {
       title: 'Guide',
-      href: '/guide',
+      href: '/guides',
     },
     {
       title: 'Backup Library',
@@ -104,8 +104,12 @@ export const SITE_CONFIG = {
       href: '/library_flag',
     },
     {
+      title: 'Updater',
+      href: '/about_updater',
+    },
+    {
       title: 'Download',
-      href: '/download',
+      href: '/download?version=latest',
     },
   ],
   footerItems: [
