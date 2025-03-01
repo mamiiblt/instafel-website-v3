@@ -8,14 +8,25 @@ import { useEffect, useState } from 'react'
 import { LoadingBar } from '@/components/ifl'
 import { Separator } from '@radix-ui/react-dropdown-menu'
 
+interface Backup {
+  id: string
+  name: string
+  author: string
+}
+
+interface BackupInfo {
+  tag_name: string
+  backups: Backup[]
+}
+
 export default function LibraryBackupPage() {
-  const [data, setData] = useState(null)
+  const [data, setData] = useState<BackupInfo | null>(null)
   useEffect(() => {
     const fetchData = async () => {
       var requestUrl =
         'https://raw.githubusercontent.com/instafel/backups/refs/heads/main/backups.json'
       const res = await fetch(requestUrl)
-      const result = await res.json()
+      const result: BackupInfo = await res.json()
       setData(result)
     }
     fetchData()
@@ -79,13 +90,13 @@ export default function LibraryBackupPage() {
                   {data ? (
                     <div>
                       <div className="mb-2" />
-                      {data.backups.map((backup) => (
+                      {data.backups.map((backup, index) => (
                         <motion.div
-                          key={backup.id}
+                          key={index}
                           initial={{ opacity: 0, y: 30 }}
                           animate={{ opacity: 1, y: 0 }}
                           transition={{
-                            delay: backup.id * 0.15,
+                            delay: index * 0.15,
                             duration: 0.6,
                             ease: 'easeOut',
                           }}
