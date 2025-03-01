@@ -35,7 +35,7 @@ export default function Home() {
                 }}
                 className="text-5xl md:text-6xl font-bold mb-6 max-w-3xl"
               >
-                Best Alpha Experience
+                Better Alpha Experience
               </motion.h1>
               <motion.p
                 initial={{ opacity: 0, y: 30 }}
