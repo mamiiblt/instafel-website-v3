@@ -1,5 +1,4 @@
 import { MetadataRoute } from 'next'
-import { getAllPosts } from '@/lib/blog'
 
 const baseUrl = process.env.NEXT_PUBLIC_SITE_URL || ''
 if (!baseUrl) {
@@ -7,8 +6,6 @@ if (!baseUrl) {
 }
 
 export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
-  const posts = await getAllPosts()
-
   // Base routes
   const routes = ['', '/library_backup', '/about_updater', '/download'].map(
     (route) => ({

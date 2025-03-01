@@ -1,8 +1,6 @@
 'use client'
 
-import { ClientHeroSection } from '@/components/home/ClientHeroSection'
 import { motion, AnimatePresence } from 'framer-motion'
-import { ClientRecentPosts } from '@/components/home/ClientRecentPosts'
 import {
   Book,
   IflDownload,

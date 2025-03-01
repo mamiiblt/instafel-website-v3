@@ -19,13 +19,6 @@ import {
   Zap,
 } from 'lucide-react'
 import { Button } from '@/components/ui/button'
-import {
-  Accordion,
-  AccordionContent,
-  AccordionItem,
-  AccordionTrigger,
-} from '@/components/ui/accordion'
-import { Github } from '@/components/Icons'
 import { useEffect, useState } from 'react'
 import { LoadingBar } from '@/components/ifl'
 
