@@ -6,6 +6,7 @@ import { Book } from '@/components/Icons'
 import { getAllPostsSync } from '@/lib/blog'
 import { useState } from 'react'
 import { Separator } from '@/components/ui/separator'
+import Footer from '@/components/Footer'
 
 export default function GuidePage() {
   const [hoveredId, setHoveredId] = useState<number | null>(null)
@@ -25,7 +26,6 @@ export default function GuidePage() {
   return (
     <AnimatePresence>
       <div className="min-h-screen py-16">
-        {/* Header */}
         <header className="container mx-auto px-4 mb-16">
           <div className="max-w-4xl mx-auto text-center">
             <motion.h1
@@ -173,6 +173,7 @@ export default function GuidePage() {
           </div>
         </div>
       </div>
+      <Footer />
     </AnimatePresence>
   )
 }

@@ -16,10 +16,11 @@ import {
 import { Button } from '@/components/ui/button'
 import Image from 'next/image'
 import Link from 'next/link'
+import Footer from '@/components/Footer'
 
 export default function Home() {
   return (
-    <main className="flex min-h-screen flex-col bg-background">
+    <main className="flex min-h-screen flex-col bg-primary-foreground dark:bg-primary-background">
       <div className="mx-auto w-full max-w-7xl px-4 sm:px-6 lg:px-8 overflow-hidden">
         <div className="space-y-8 sm:space-y-12 py-6 sm:py-8 md:py-12 lg:py-16">
           <div className="animate-fadeIn">
@@ -40,7 +41,7 @@ export default function Home() {
                 animate={{ opacity: 1, y: 0 }}
                 transition={{
                   delay: 0.5,
-                  duration: 0.6,
+                  duration: 0.8,
                   ease: 'easeOut',
                 }}
                 className="text-muted-foreground  mb-6 text-xl max-w-xl"
@@ -52,8 +53,8 @@ export default function Home() {
                 initial={{ opacity: 0, y: 30 }}
                 animate={{ opacity: 1, y: 0 }}
                 transition={{
-                  delay: 0.5,
-                  duration: 0.6,
+                  delay: 0.7,
+                  duration: 0.8,
                   ease: 'easeOut',
                 }}
               >
@@ -87,8 +88,8 @@ export default function Home() {
                 initial={{ opacity: 0, y: 30 }}
                 animate={{ opacity: 1, y: 0 }}
                 transition={{
-                  delay: 0.5,
-                  duration: 0.6,
+                  delay: 0.9,
+                  duration: 0.8,
                   ease: 'easeOut',
                 }}
               >
@@ -103,7 +104,10 @@ export default function Home() {
             </section>
           </div>
           <div className="animate-fadeIn">
-            <section id="features" className="pb-16 px-4 md:px-12 bg-white">
+            <section
+              id="features"
+              className="pb-6 px-4 md:px-12 bg-primary-foreground dark:bg-primary-background"
+            >
               <h2 className="text-3xl font-bold text-center mb-12">
                 Instafel Features
               </h2>
@@ -169,7 +173,8 @@ export default function Home() {
               <div className="max-w-4xl mx-auto flex flex-col md:flex-row items-center">
                 <div className="md:w-1/2 mb-8 md:mb-0">
                   <h2 className="text-3xl font-bold mb-4 text-center md:text-left">
-                    Join Telegram Channel for Latest News and Discussion
+                    Join Telegram Group for <br />
+                    News & Discussion
                   </h2>
                   <p className="text mb-6 text-center md:text-left">
                     Join our Telegram group to stay up-to-date with the latest
@@ -178,8 +183,7 @@ export default function Home() {
                   </p>
                   <div className="flex flex-col sm:flex-row space-y-3 sm:space-y-0 sm:space-x-4">
                     <a
-                      href="https://t.me/uygulamaadi"
-                      target="_blank"
+                      href="https://t.me/instafel"
                       rel="noopener noreferrer"
                       className="bg-black text-white px-6 py-3 rounded-lg flex items-center justify-center hover:bg-black transition-colors"
                     >
@@ -196,7 +200,7 @@ export default function Home() {
                         src="/instafel.jpg"
                         width="70"
                         height="70"
-                        quality="100"
+                        quality="50"
                         className="rounded-full p-2"
                       />
                       <div className="ml-3">
@@ -228,6 +232,7 @@ export default function Home() {
           </div>
         </div>
       </div>
+      <Footer />
     </main>
   )
 }

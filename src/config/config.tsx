@@ -108,6 +108,10 @@ export const SITE_CONFIG = {
       href: '/about_updater',
     },
     {
+      title: 'Telegram',
+      href: 'https://t.me/instafel',
+    },
+    {
       title: 'Download',
       href: '/download?version=latest',
     },

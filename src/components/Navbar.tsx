@@ -64,10 +64,10 @@ export default function Navbar() {
   }
 
   return (
-    <div className="border-b border-border container mx-auto flex h-16 items-center px-4 sm:px-6">
+    <div className="border-b border-border container mx-auto flex h-16 items-center px-6 sm:px-6">
       <div className="flex w-1/8 sm:w-1/3">
         <Link href="/">
-          <div className="flex items-center space-x-2 ml-4 sm:ml-8">
+          <div className="flex items-center space-x-2 sm:ml-8">
             <LucideInstagram className="" />
             <span className="text-lg font-normal text-foreground text-2xl">
               Instafel
@@ -139,10 +139,6 @@ export default function Navbar() {
       </div>
 
       <div className="flex w-1/4 sm:w-1/3 justify-end items-center space-x-4">
-        <ThemeToggle />
-        <Link href="https://t.me/instafel">
-          <Send className="h-[1.2rem] w-[1.2rem]" />
-        </Link>
         <Sheet open={open} onOpenChange={setOpen}>
           <SheetTrigger asChild>
             <Button
@@ -150,7 +146,7 @@ export default function Navbar() {
               size="icon"
               className="md:hidden hover:bg-accent transition-colors duration-200"
             >
-              <Menu className="h-5 w-5" />
+              <Menu className="h-6 w-6" />
               <span className="sr-only">Toggle menu</span>
             </Button>
           </SheetTrigger>
@@ -248,7 +244,7 @@ export default function Navbar() {
                               : 'text-foreground'
                           }`}
                       >
-                        <Telegram />
+                        <Send />
                         <span>{link.title}</span>
                       </Link>
                     )}

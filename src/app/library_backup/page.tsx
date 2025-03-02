@@ -7,6 +7,7 @@ import { getAllPostsSync, getInstafelBackups } from '@/lib/blog'
 import { useEffect, useState } from 'react'
 import { LoadingBar } from '@/components/ifl'
 import { Separator } from '@radix-ui/react-dropdown-menu'
+import Footer from '@/components/Footer'
 
 interface Backup {
   id: string
@@ -34,60 +35,60 @@ export default function LibraryBackupPage() {
 
   return (
     <AnimatePresence>
-      <div className="flex flex-col">
-        <section id="backup_lib" className="py-12 px-4 md:px-12">
-          <div className="max-w-6xl mx-auto">
-            <div className="text-center mb-12">
+      {data ? (
+        <div className="flex flex-col">
+          <section id="backup_lib" className="py-12 px-4 md:px-12">
+            <div className="max-w-6xl mx-auto">
+              <div className="text-center mb-12">
+                <motion.div
+                  initial={{ opacity: 0, y: 30 }}
+                  animate={{ opacity: 1, y: 0 }}
+                  transition={{
+                    duration: 0.8,
+                    ease: 'easeOut',
+                  }}
+                  className="bg-gray-600 text-white p-3 rounded-lg inline-block mb-4"
+                >
+                  <IflLibraryBackup size={24} />
+                </motion.div>
+                <motion.h2
+                  initial={{ opacity: 0, y: 30 }}
+                  animate={{ opacity: 1, y: 0 }}
+                  transition={{
+                    duration: 0.8,
+                    ease: 'easeInOut',
+                  }}
+                  className="text-3xl font-bold mb-4"
+                >
+                  Backup Library
+                </motion.h2>
+                <motion.p
+                  initial={{ opacity: 0, y: 30 }}
+                  animate={{ opacity: 1, y: 0 }}
+                  transition={{
+                    delay: 0.5,
+                    duration: 0.6,
+                    ease: 'easeOut',
+                  }}
+                  className="text-muted-foreground  max-w-2xl mx-auto"
+                >
+                  On this page you can view all backup files available for
+                  Instafel, and also use features like automatic updates with
+                  the Library within the app!
+                </motion.p>
+              </div>
+
               <motion.div
                 initial={{ opacity: 0, y: 30 }}
                 animate={{ opacity: 1, y: 0 }}
                 transition={{
+                  delay: 1,
                   duration: 0.8,
                   ease: 'easeOut',
                 }}
-                className="bg-gray-600 text-white p-3 rounded-lg inline-block mb-4"
               >
-                <IflLibraryBackup size={24} />
-              </motion.div>
-              <motion.h2
-                initial={{ opacity: 0, y: 30 }}
-                animate={{ opacity: 1, y: 0 }}
-                transition={{
-                  duration: 0.8,
-                  ease: 'easeInOut',
-                }}
-                className="text-3xl font-bold mb-4"
-              >
-                Backup Library
-              </motion.h2>
-              <motion.p
-                initial={{ opacity: 0, y: 30 }}
-                animate={{ opacity: 1, y: 0 }}
-                transition={{
-                  delay: 0.5,
-                  duration: 0.6,
-                  ease: 'easeOut',
-                }}
-                className="text-muted-foreground  max-w-2xl mx-auto"
-              >
-                On this page you can view all backup files available for
-                Instafel, and also use features like automatic updates with the
-                Library within the app!
-              </motion.p>
-            </div>
-
-            <motion.div
-              initial={{ opacity: 0, y: 30 }}
-              animate={{ opacity: 1, y: 0 }}
-              transition={{
-                delay: 1,
-                duration: 0.8,
-                ease: 'easeOut',
-              }}
-            >
-              <div className="bg-white rounded-xl shadow-md overflow-hidden">
-                <div className="px-4">
-                  {data ? (
+                <div className="bg-white rounded-xl shadow-md overflow-hidden">
+                  <div className="px-4">
                     <div>
                       <div className="mb-2" />
                       {data.backups.map((backup, index) => (
@@ -120,15 +121,16 @@ export default function LibraryBackupPage() {
                         </motion.div>
                       ))}
                     </div>
-                  ) : (
-                    <LoadingBar />
-                  )}
+                  </div>
                 </div>
-              </div>
-            </motion.div>
-          </div>
-        </section>
-      </div>
+              </motion.div>
+            </div>
+          </section>
+          <Footer />
+        </div>
+      ) : (
+        <LoadingBar />
+      )}
     </AnimatePresence>
   )
 }

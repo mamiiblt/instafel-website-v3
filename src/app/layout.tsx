@@ -1,25 +1,25 @@
-import type { Metadata } from "next";
-import { Geist } from "next/font/google";
-import "./globals.css";
-import { ThemeProvider } from "@/components/providers/theme-provider";
-import Navbar from "@/components/Navbar";
-import Footer from "@/components/Footer";
-import { SITE_CONFIG } from "@/config/config";
-import { defaultMetadata } from "@/config/metadata";
-import { Toaster } from "@/components/ui/toaster";
+import type { Metadata } from 'next'
+import { Geist } from 'next/font/google'
+import './globals.css'
+import { ThemeProvider } from '@/components/providers/theme-provider'
+import Navbar from '@/components/Navbar'
+import Footer from '@/components/Footer'
+import { SITE_CONFIG } from '@/config/config'
+import { defaultMetadata } from '@/config/metadata'
+import { Toaster } from '@/components/ui/toaster'
 
-const appleTitle = SITE_CONFIG.siteName;
+const appleTitle = SITE_CONFIG.siteName
 
 const geist = Geist({
-  subsets: ["latin"],
-});
+  subsets: ['latin'],
+})
 
-export const metadata = defaultMetadata;
+export const metadata = defaultMetadata
 
 export default function RootLayout({
   children,
 }: Readonly<{
-  children: React.ReactNode;
+  children: React.ReactNode
 }>) {
   return (
     <html lang="en" suppressHydrationWarning>
@@ -35,10 +35,9 @@ export default function RootLayout({
             <Toaster />
             <Navbar />
             <main className="flex-1">{children}</main>
-            <Footer />
           </ThemeProvider>
         </body>
       </head>
     </html>
-  );
+  )
 }
