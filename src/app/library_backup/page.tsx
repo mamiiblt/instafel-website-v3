@@ -73,8 +73,8 @@ export default function LibraryBackupPage() {
                   className="text-muted-foreground  max-w-2xl mx-auto"
                 >
                   On this page you can view all backup files available for
-                  Instafel, and also use features like automatic updates with
-                  the Library within the app!
+                  Instafel, and also you can use features like automatic updates
+                  with the library within the app!
                 </motion.p>
               </div>
 

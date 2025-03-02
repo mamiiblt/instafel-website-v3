@@ -1,13 +1,13 @@
-'use client'
-import React from 'react'
-import * as Icons from '@/components/Icons'
-import Link from 'next/link'
-import { SITE_CONFIG } from '@/config/config'
-import CustomSocialLinks from './CustomSocialLinks'
-import { FooterLoading } from './loading'
-import { motion } from 'framer-motion'
-import { usePathname } from 'next/navigation'
-import Image from 'next/image'
+"use client";
+import React from "react";
+import * as Icons from "@/components/Icons";
+import Link from "next/link";
+import { SITE_CONFIG } from "@/config/config";
+import CustomSocialLinks from "./CustomSocialLinks";
+import { FooterLoading } from "./loading";
+import { motion } from "framer-motion";
+import { usePathname } from "next/navigation";
+import Image from "next/image";
 import {
   Book,
   Download,
@@ -18,18 +18,18 @@ import {
   RefreshCcwDot,
   Send,
   User,
-} from 'lucide-react'
+} from "lucide-react";
 
 export default function Footer() {
-  const [loading, setLoading] = React.useState(true)
-  const pathname = usePathname()
+  const [loading, setLoading] = React.useState(true);
+  const pathname = usePathname();
 
   React.useEffect(() => {
-    setLoading(false)
-  }, [])
+    setLoading(false);
+  }, []);
 
   if (loading) {
-    return <FooterLoading />
+    return <FooterLoading />;
   }
 
   const container = {
@@ -40,20 +40,20 @@ export default function Footer() {
         staggerChildren: 0.1,
       },
     },
-  }
+  };
 
   const item = {
     hidden: { opacity: 0, y: 20 },
     show: { opacity: 1, y: 0 },
-  }
+  };
 
   return (
     <div>
-      {pathname !== '/about' && (
+      {pathname !== "/about" && (
         <footer className="relative border-t border-border g-gradient-to-b from-background to-background/50 backdrop-blur-sm">
           <div className="absolute inset-0 pointer-events-none" />
 
-          <div className="relative container mx-auto px-4 py-12 md:py-16">
+          <div className="relative container mx-auto px-4 pt-8 md:pt-8 pb-8 md:pb-8">
             <div className="max-w-6xl mx-auto">
               <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
                 <div className="space-y-4">
@@ -137,5 +137,5 @@ export default function Footer() {
         </footer>
       )}
     </div>
-  )
+  );
 }

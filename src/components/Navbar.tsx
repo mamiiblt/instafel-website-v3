@@ -118,21 +118,23 @@ export default function Navbar() {
                     );
                   }
 
-                  return (
-                    <motion.div
-                      key={link.href}
-                      initial={{ opacity: 0, y: -10 }}
-                      animate={{ opacity: 1, y: 0 }}
-                      exit={{ opacity: 0, y: -10 }}
-                      transition={{ duration: 0.2 }}
-                    >
-                      <NavigationItem
-                        href={link.href}
-                        title={link.title}
-                        isActive={pathname === link.href}
-                      />
-                    </motion.div>
-                  );
+                  if (link.title !== "Telegram") {
+                    return (
+                      <motion.div
+                        key={link.href}
+                        initial={{ opacity: 0, y: -10 }}
+                        animate={{ opacity: 1, y: 0 }}
+                        exit={{ opacity: 0, y: -10 }}
+                        transition={{ duration: 0.2 }}
+                      >
+                        <NavigationItem
+                          href={link.href}
+                          title={link.title}
+                          isActive={pathname === link.href}
+                        />
+                      </motion.div>
+                    );
+                  }
                 })}
               </AnimatePresence>
             </NavigationMenuList>
