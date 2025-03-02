@@ -1,73 +1,79 @@
-'use client'
+"use client";
 
-import { AnimatePresence, motion } from 'framer-motion'
-import Link from 'next/link'
+import { AnimatePresence, motion } from "framer-motion";
 import {
   Book,
   IflDownload,
   IflGuide,
   IflLibrary,
   IflLibraryBackup,
-} from '@/components/Icons'
-import { getAllPostsSync, getInstafelBackups } from '@/lib/blog'
-import { useEffect, useState } from 'react'
-import { Card, CardContent, CardFooter, CardHeader } from '@/components/ui/card'
-import { Badge } from '@/components/ui/badge'
-import { Button } from '@/components/ui/button'
-import { ScrollArea } from '@/components/ui/scroll-area'
-import { Separator } from '@/components/ui/separator'
-import { useSearchParams } from 'next/navigation'
-import { LoadingBar } from '@/components/ifl'
-import Footer from '@/components/Footer'
+} from "@/components/Icons";
+import { Suspense, useEffect, useState } from "react";
+import {
+  Card,
+  CardContent,
+  CardFooter,
+  CardHeader,
+} from "@/components/ui/card";
+import { Badge } from "@/components/ui/badge";
+import { Button } from "@/components/ui/button";
+import { useSearchParams } from "next/navigation";
+import { LoadingBar } from "@/components/ifl";
+import Footer from "@/components/Footer";
 
 interface Manifest {
-  version_name: string
-  author: string
-  changelog: string
-  last_updated: string
-  description: string
-  name: string
+  version_name: string;
+  author: string;
+  changelog: string;
+  last_updated: string;
+  description: string;
+  name: string;
 }
 
 interface Resp {
-  manifest_version: number
-  manifest: Manifest
+  manifest_version: number;
+  manifest: Manifest;
 }
 
 export default function LibraryBackupPage() {
-  const [id, setId] = useState('null')
-  const [data, setData] = useState<Resp | null>(null)
+  return (
+    <Suspense fallback={<LoadingBar />}>
+      <LibraryBackupPageContent />
+    </Suspense>
+  );
+}
 
-  useEffect(() => {
-    const params = new URLSearchParams(window.location.search)
-    setId(params.get('id') ?? 'null')
-  }, [])
+function LibraryBackupPageContent() {
+  const searchParams = useSearchParams();
+  const id = searchParams.get("id") ?? "null";
+
+  const [data, setData] = useState<Resp | null>(null);
 
   useEffect(() => {
     const fetchData = async () => {
-      const requestUrl = `https://raw.githubusercontent.com/instafel/backups/refs/heads/main/${id}/manifest.json`
-      const res = await fetch(requestUrl)
-      const result: Resp = await res.json()
-      setData(result)
-    }
-    fetchData()
-  }, [id])
+      const requestUrl = `https://raw.githubusercontent.com/instafel/backups/refs/heads/main/${id}/manifest.json`;
+      const res = await fetch(requestUrl);
+      const result: Resp = await res.json();
+      setData(result);
+    };
+    fetchData();
+  }, [id]);
 
   const handleDownloadBackup = (id: string, version: string) => {
-    const link = document.createElement('a')
-    link.href = `https://api.mamiiblt.me/ifl/dw_backup?id=${id}&version=${version}`
-    document.body.appendChild(link)
-    link.click()
-    document.body.removeChild(link)
-  }
+    const link = document.createElement("a");
+    link.href = `https://api.mamiiblt.me/ifl/dw_backup?id=${id}&version=${version}`;
+    document.body.appendChild(link);
+    link.click();
+    document.body.removeChild(link);
+  };
 
   const handleImportInstafel = () => {
     // Implement import functionality
-    console.log('Importing to Instafel...')
-  }
+    console.log("Importing to Instafel...");
+  };
 
   return (
-    <div>
+    <AnimatePresence>
       {data ? (
         <div>
           <div className="container mx-auto py-4 px-4">
@@ -81,7 +87,7 @@ export default function LibraryBackupPage() {
                         animate={{ opacity: 1, y: 0 }}
                         transition={{
                           duration: 0.8,
-                          ease: 'easeOut',
+                          ease: "easeOut",
                         }}
                         className="text-3xl font-bold"
                       >
@@ -93,7 +99,7 @@ export default function LibraryBackupPage() {
                         transition={{
                           delay: 0.3,
                           duration: 0.8,
-                          animate: 'show',
+                          animate: "show",
                         }}
                         className="flex flex-wrap items-center gap-2 mt-2"
                       >
@@ -117,7 +123,7 @@ export default function LibraryBackupPage() {
                       transition={{
                         delay: 0.5,
                         duration: 0.8,
-                        ease: 'easeOut',
+                        ease: "easeOut",
                       }}
                     >
                       <Button
@@ -146,7 +152,7 @@ export default function LibraryBackupPage() {
                   transition={{
                     delay: 0.7,
                     duration: 0.8,
-                    ease: 'easeOut',
+                    ease: "easeOut",
                   }}
                 >
                   <CardContent className="">
@@ -194,6 +200,6 @@ export default function LibraryBackupPage() {
       ) : (
         <LoadingBar />
       )}
-    </div>
-  )
+    </AnimatePresence>
+  );
 }

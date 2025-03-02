@@ -1,8 +1,8 @@
-'use client'
+"use client";
 
-import { AnimatePresence, motion } from 'framer-motion'
-import Link from 'next/link'
-import { Card } from '@/components/ui/card'
+import { AnimatePresence, motion } from "framer-motion";
+import Link from "next/link";
+import { Card } from "@/components/ui/card";
 import {
   ArrowDownToLine,
   AudioLines,
@@ -17,43 +17,43 @@ import {
   Shield,
   VolumeX,
   Zap,
-} from 'lucide-react'
-import { Button } from '@/components/ui/button'
-import { useEffect, useState } from 'react'
-import { LoadingBar } from '@/components/ifl'
-import Footer from '@/components/Footer'
+} from "lucide-react";
+import { Button } from "@/components/ui/button";
+import { useEffect, useState } from "react";
+import { LoadingBar } from "@/components/ifl";
+import Footer from "@/components/Footer";
 
 interface Asset {
-  name: string
-  browser_download_url: string
+  name: string;
+  browser_download_url: string;
 }
 
 interface Release {
-  tag_name: string
-  assets: Asset[]
+  tag_name: string;
+  assets: Asset[];
 }
 
 export default function UpdaterPage() {
-  const [apkUrl, setApkUrl] = useState<string | null>(null)
-  const [versionTag, setVersionTag] = useState<string | null>(null)
+  const [apkUrl, setApkUrl] = useState<string | null>(null);
+  const [versionTag, setVersionTag] = useState<string | null>(null);
 
   useEffect(() => {
     const fetchApkUrl = async () => {
       const response = await fetch(
-        'https://api.github.com/repos/mamiiblt/instafel-updater/releases/latest'
-      )
-      const data: Release = await response.json()
-      setVersionTag(data.tag_name)
+        "https://api.github.com/repos/mamiiblt/instafel-updater/releases/latest"
+      );
+      const data: Release = await response.json();
+      setVersionTag(data.tag_name);
 
-      const apkAsset = data.assets.find((asset) => asset.name.endsWith('.apk'))
-      setApkUrl(apkAsset ? apkAsset.browser_download_url : null)
-    }
+      const apkAsset = data.assets.find((asset) => asset.name.endsWith(".apk"));
+      setApkUrl(apkAsset ? apkAsset.browser_download_url : null);
+    };
 
-    fetchApkUrl()
-  }, [])
+    fetchApkUrl();
+  }, []);
 
   if (!apkUrl) {
-    return <LoadingBar />
+    return <LoadingBar />;
   }
   return (
     <AnimatePresence>
@@ -67,7 +67,7 @@ export default function UpdaterPage() {
                   animate={{ opacity: 1, y: 0 }}
                   transition={{
                     duration: 0.8,
-                    ease: 'easeOut',
+                    ease: "easeOut",
                   }}
                 >
                   <h1 className="text-4xl font-extrabold tracking-tight sm:text-5xl md:text-6xl">
@@ -83,7 +83,7 @@ export default function UpdaterPage() {
                   transition={{
                     delay: 0.3,
                     duration: 0.8,
-                    ease: 'easeOut',
+                    ease: "easeOut",
                   }}
                   className="mt-3 max-w-md mx-auto text-xl text-muted-foreground sm:text-2xl md:mt-5 md:max-w-3xl"
                 >
@@ -97,13 +97,13 @@ export default function UpdaterPage() {
                     transition={{
                       delay: 0.6,
                       duration: 0.8,
-                      ease: 'easeOut',
+                      ease: "easeOut",
                     }}
                   >
                     <div className="mb-16">
                       <Button
                         asChild
-                        size={'lg'}
+                        size={"lg"}
                         variant="default"
                         className="w-full mb-4 md:mr-5 sm:w-auto transform hover:scale-105 transition-transform duration-200"
                       >
@@ -114,7 +114,7 @@ export default function UpdaterPage() {
                       </Button>
                       <Button
                         asChild
-                        size={'lg'}
+                        size={"lg"}
                         variant="outline-gradient"
                         className="w-full sm:w-auto transform hover:scale-105 transition-transform duration-200"
                       >
@@ -134,21 +134,21 @@ export default function UpdaterPage() {
                   {
                     delay: 0.8,
                     icon: <AudioLines className="h-8 w-8 text-primary" />,
-                    title: 'Slient Installation',
+                    title: "Slient Installation",
                     description:
-                      'Updater runs full-time in the background for automatically downloading and installing the latest versions from API.',
+                      "Updater runs full-time in the background for automatically downloading and installing the latest versions from API.",
                   },
                   {
                     delay: 0.9,
                     icon: <PawPrint className="h-8 w-8 text-primary" />,
-                    title: 'Shizuku Support',
+                    title: "Shizuku Support",
                     description:
-                      'Non-rooted phones can also use Instafel Updater with Shizuku without any Root managers!',
+                      "Non-rooted phones can also use Instafel Updater with Shizuku without any Root managers!",
                   },
                   {
                     delay: 1,
                     icon: <GitBranch className="h-8 w-8 text-primary" />,
-                    title: 'Open Source',
+                    title: "Open Source",
                     description:
                       "Instafel Updater is completely open source, so you don't have to worry about granting the necessary permissions!",
                   },
@@ -160,7 +160,7 @@ export default function UpdaterPage() {
                     transition={{
                       delay: feature.delay,
                       duration: 0.8,
-                      ease: 'easeOut',
+                      ease: "easeOut",
                     }}
                   >
                     <Card className="flex flex-col items-center text-center p-6">
@@ -184,7 +184,7 @@ export default function UpdaterPage() {
                 transition={{
                   delay: 1.2,
                   duration: 0.8,
-                  ease: 'easeOut',
+                  ease: "easeOut",
                 }}
               >
                 <div className="mb-16">
@@ -193,9 +193,9 @@ export default function UpdaterPage() {
                   </h2>
                   <ul className="space-y-4">
                     {[
-                      'Always have the latest patches and featues!',
-                      'Save time - no need to manually update with in-app OTA',
-                      'A lightweight app that is efficient with system resources',
+                      "Always have the latest patches and featues!",
+                      "Save time - no need to manually update with in-app OTA",
+                      "A lightweight app that is efficient with system resources",
                     ].map((benefit, index) => (
                       <li key={index} className="flex items-start">
                         <CheckCircle className="h-6 w-6 text-primary mr-2 flex-shrink-0" />
@@ -212,10 +212,10 @@ export default function UpdaterPage() {
                 transition={{
                   delay: 1.4,
                   duration: 0.8,
-                  ease: 'easeOut',
+                  ease: "easeOut",
                 }}
               >
-                {' '}
+                {" "}
                 <div className="text-center">
                   <h2 className="text-3xl font-bold mb-4">Download Now</h2>
                   <p className="text-xl text-muted-foreground mb-8">
@@ -242,5 +242,5 @@ export default function UpdaterPage() {
         <LoadingBar />
       )}
     </AnimatePresence>
-  )
+  );
 }

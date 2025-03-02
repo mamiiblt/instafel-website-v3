@@ -1,27 +1,27 @@
-'use client'
+"use client";
 
-import { AnimatePresence, motion } from 'framer-motion'
-import Link from 'next/link'
-import { Book } from '@/components/Icons'
-import { getAllPostsSync } from '@/lib/blog'
-import { useState } from 'react'
-import { Separator } from '@/components/ui/separator'
-import Footer from '@/components/Footer'
+import { AnimatePresence, motion } from "framer-motion";
+import Link from "next/link";
+import { Book } from "@/components/Icons";
+import { getAllPostsSync } from "@/lib/blog";
+import { useState } from "react";
+import { Separator } from "@/components/ui/separator";
+import Footer from "@/components/Footer";
 
 export default function GuidePage() {
-  const [hoveredId, setHoveredId] = useState<number | null>(null)
-  const guides = getAllPostsSync()
+  const [hoveredId, setHoveredId] = useState<number | null>(null);
+  const guides = getAllPostsSync();
 
   const getColorClasses = (color: string) => {
     const classes = {
-      indigo: 'bg-indigo-50 text-indigo-600 border-indigo-100',
-      rose: 'bg-rose-50 text-rose-600 border-rose-100',
-      sky: 'bg-sky-50 text-sky-600 border-sky-100',
-      purple: 'bg-purple-50 text-purple-600 border-purple-100',
-      orange: 'bg-orange-50 text-orange-600 border-orange-100',
-    }
-    return classes[color as keyof typeof classes] || classes.indigo
-  }
+      indigo: "bg-indigo-50 text-indigo-600 border-indigo-100",
+      rose: "bg-rose-50 text-rose-600 border-rose-100",
+      sky: "bg-sky-50 text-sky-600 border-sky-100",
+      purple: "bg-purple-50 text-purple-600 border-purple-100",
+      orange: "bg-orange-50 text-orange-600 border-orange-100",
+    };
+    return classes[color as keyof typeof classes] || classes.indigo;
+  };
 
   return (
     <AnimatePresence>
@@ -33,7 +33,7 @@ export default function GuidePage() {
               animate={{ opacity: 1, y: 0 }}
               transition={{
                 duration: 0.8,
-                ease: 'easeOut',
+                ease: "easeOut",
               }}
               className="text-7xl font-black tracking-tight mb-6 bg-gradient-to-r from-gray-900 to-gray-600 text-transparent bg-clip-text"
             >
@@ -44,7 +44,7 @@ export default function GuidePage() {
               animate={{ opacity: 1, y: 0 }}
               transition={{
                 duration: 0.8,
-                ease: 'easeOut',
+                ease: "easeOut",
               }}
               className="text-xl text-gray-600 max-w-2xl mx-auto"
             >
@@ -59,7 +59,7 @@ export default function GuidePage() {
           transition={{
             delay: 0.15,
             duration: 0.8,
-            ease: 'easeOut',
+            ease: "easeOut",
           }}
           className="container mx-auto px-4 mb-24"
           whileHover={{ scale: 1.02 }}
@@ -122,7 +122,7 @@ export default function GuidePage() {
                   transition={{
                     delay: 0.15,
                     duration: 0.8,
-                    ease: 'easeOut',
+                    ease: "easeOut",
                   }}
                   className="container mx-auto px-4 mb-24"
                 >
@@ -147,7 +147,7 @@ export default function GuidePage() {
                           className={`p-3 rounded-xl transition-all duration-300 ${
                             hoveredId === guide.id
                               ? getColorClasses(guide.color)
-                              : 'text-gray-400'
+                              : "text-gray-400"
                           }`}
                         >
                           <svg
@@ -175,5 +175,5 @@ export default function GuidePage() {
       </div>
       <Footer />
     </AnimatePresence>
-  )
+  );
 }

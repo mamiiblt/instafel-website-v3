@@ -1,12 +1,12 @@
-'use client'
+"use client";
 
-import { AnimatePresence, motion } from 'framer-motion'
-import Image from 'next/image'
-import CustomSocialLinks from '@/components/CustomSocialLinks'
-import Link from 'next/link'
-import { Button } from '@/components/ui/button'
-import { Book, Code, Coffee, Instagram, Rocket } from '@/components/Icons'
-import { useEffect, useState } from 'react'
+import { AnimatePresence, motion } from "framer-motion";
+import Image from "next/image";
+import CustomSocialLinks from "@/components/CustomSocialLinks";
+import Link from "next/link";
+import { Button } from "@/components/ui/button";
+import { Book, Code, Coffee, Instagram, Rocket } from "@/components/Icons";
+import { Suspense, useEffect, useState } from "react";
 import {
   Card,
   CardContent,
@@ -14,10 +14,10 @@ import {
   CardFooter,
   CardHeader,
   CardTitle,
-} from '@/components/ui/card'
-import { RadioGroupItem } from '@/components/ui/radio-group'
-import { Label } from '@/components/ui/label'
-import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs'
+} from "@/components/ui/card";
+import { RadioGroupItem } from "@/components/ui/radio-group";
+import { Label } from "@/components/ui/label";
+import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import {
   Check,
   ChevronRight,
@@ -30,40 +30,44 @@ import {
   Server,
   Smartphone,
   Zap,
-} from 'lucide-react'
-import { RadioGroup } from '@radix-ui/react-radio-group'
-import { Separator } from '@/components/ui/separator'
-import { useSearchParams } from 'next/navigation'
-import { LoadingBar } from '@/components/ifl'
-import Footer from '@/components/Footer'
+} from "lucide-react";
+import { RadioGroup } from "@radix-ui/react-radio-group";
+import { Separator } from "@/components/ui/separator";
+import { useSearchParams } from "next/navigation";
+import { LoadingBar } from "@/components/ifl";
+import Footer from "@/components/Footer";
 
 export default function DownloadPage() {
-  const [version, setVersion] = useState('null')
+  return (
+    <Suspense fallback={<LoadingBar />}>
+      <DownloadPageContent />
+    </Suspense>
+  );
+}
 
-  useEffect(() => {
-    const params = new URLSearchParams(window.location.search)
-    setVersion(params.get('version') ?? 'null')
-  }, [])
+function DownloadPageContent() {
+  const searchParams = useSearchParams();
+  const version = searchParams.get("version");
 
-  const [data, setData] = useState(null)
+  const [data, setData] = useState(null);
   useEffect(() => {
     if (version != null) {
-      if (version != 'latest') {
-        setData(version)
+      if (version != "latest") {
+        setData(version);
       } else {
         const fetchData = async () => {
           const res = await fetch(
-            'https://api.github.com/repos/mamiiblt/instafel_release_arm64-v8a/releases/latest'
-          )
-          const result = await res.json()
-          setData(result.tag_name)
-        }
-        fetchData()
+            "https://api.github.com/repos/mamiiblt/instafel_release_arm64-v8a/releases/latest"
+          );
+          const result = await res.json();
+          setData(result.tag_name);
+        };
+        fetchData();
       }
     } else {
-      setData(0)
+      setData(0);
     }
-  }, [])
+  }, []);
 
   return (
     <AnimatePresence>
@@ -76,7 +80,7 @@ export default function DownloadPage() {
                 animate={{ opacity: 1, y: 0 }}
                 transition={{
                   duration: 0.8,
-                  ease: 'easeInOut',
+                  ease: "easeInOut",
                 }}
               >
                 <div className="mx-auto mb-4 p-3 rounded-full bg-primary/10 w-16 h-16 flex items-center justify-center">
@@ -90,7 +94,7 @@ export default function DownloadPage() {
                 transition={{
                   delay: 0.3,
                   duration: 0.8,
-                  ease: 'easeInOut',
+                  ease: "easeInOut",
                 }}
               >
                 <CardTitle className="text-3xl font-bold">
@@ -104,7 +108,7 @@ export default function DownloadPage() {
                 transition={{
                   delay: 0.5,
                   duration: 0.8,
-                  ease: 'easeInOut',
+                  ease: "easeInOut",
                 }}
               >
                 <CardDescription className="text-lg max-w-xl mx-auto">
@@ -122,15 +126,15 @@ export default function DownloadPage() {
                   transition={{
                     delay: 0.8,
                     duration: 1,
-                    ease: 'easeInOut',
+                    ease: "easeInOut",
                   }}
                 >
                   <Link
                     href={{
-                      pathname: '/download_instafel',
+                      pathname: "/download_instafel",
                       query: {
                         version: data,
-                        arch: 'arm64',
+                        arch: "arm64",
                       },
                     }}
                   >
@@ -181,15 +185,15 @@ export default function DownloadPage() {
                   transition={{
                     delay: 1.1,
                     duration: 0.8,
-                    ease: 'easeInOut',
+                    ease: "easeInOut",
                   }}
                 >
                   <Link
                     href={{
-                      pathname: '/download_instafel',
+                      pathname: "/download_instafel",
                       query: {
                         version: data,
-                        arch: 'arm32',
+                        arch: "arm32",
                       },
                     }}
                   >
@@ -241,7 +245,7 @@ export default function DownloadPage() {
                 transition={{
                   delay: 1.2,
                   duration: 1,
-                  ease: 'easeInOut',
+                  ease: "easeInOut",
                 }}
               >
                 <div className="space-y-3 text-sm mt-6">
@@ -257,7 +261,7 @@ export default function DownloadPage() {
                       </li>
                     </ol>
                   </div>
-                </div>{' '}
+                </div>{" "}
               </motion.div>
             </CardContent>
           </div>
@@ -267,5 +271,5 @@ export default function DownloadPage() {
         <LoadingBar />
       )}
     </AnimatePresence>
-  )
+  );
 }

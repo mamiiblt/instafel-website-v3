@@ -1,11 +1,11 @@
-'use client'
+"use client";
 
-import { AnimatePresence, motion } from 'framer-motion'
-import { Button } from '@/components/ui/button'
-import { useEffect, useState } from 'react'
-import { Card, CardContent } from '@/components/ui/card'
-import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs'
-import Link from 'next/link'
+import { AnimatePresence, motion } from "framer-motion";
+import { Button } from "@/components/ui/button";
+import { Suspense, useEffect, useState } from "react";
+import { Card, CardContent } from "@/components/ui/card";
+import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
+import Link from "next/link";
 
 import {
   ArrowRight,
@@ -19,8 +19,8 @@ import {
   LucideFileText,
   Shapes,
   TypeIcon,
-} from 'lucide-react'
-import { useSearchParams } from 'next/navigation'
+} from "lucide-react";
+import { useSearchParams } from "next/navigation";
 import {
   Table,
   TableBody,
@@ -28,34 +28,39 @@ import {
   TableHead,
   TableHeader,
   TableRow,
-} from '@/components/ui/table'
-import { Badge } from '@/components/ui/badge'
-import { LoadingBar } from '@/components/ifl'
-import { Label } from '@/components/ui/label'
-import Footer from '@/components/Footer'
+} from "@/components/ui/table";
+import { Badge } from "@/components/ui/badge";
+import { LoadingBar } from "@/components/ifl";
+import { Label } from "@/components/ui/label";
+import Footer from "@/components/Footer";
 
-export default function DownloadIfl() {
-  const [activeTab, setActiveTab] = useState('download')
-  const [version, setVersion] = useState('null')
-  const [arch, setArch] = useState('null')
+export default function DownloadInstafelPage() {
+  return (
+    <Suspense fallback={<LoadingBar />}>
+      <DownloadIflContent />
+    </Suspense>
+  );
+}
 
-  useEffect(() => {
-    const params = new URLSearchParams(window.location.search)
-    setVersion(params.get('version') ?? 'null')
-    setArch(params.get('arch') ?? 'null')
-  }, [])
+function DownloadIflContent() {
+  const [activeTab, setActiveTab] = useState("download");
 
-  const [data, setData] = useState(null)
+  const searchParams = useSearchParams();
+  const version = searchParams.get("version");
+  const arch = searchParams.get("arch");
+
+  const [data, setData] = useState(null);
   useEffect(() => {
     const fetchData = async () => {
-      var requestUrl = 'https://api.github.com/repos/mamiiblt/instafel_release_'
-      if (arch == 'arm64') {
-        requestUrl = requestUrl + 'arm64-v8a/releases/tags/' + version
+      var requestUrl =
+        "https://api.github.com/repos/mamiiblt/instafel_release_";
+      if (arch == "arm64") {
+        requestUrl = requestUrl + "arm64-v8a/releases/tags/" + version;
       } else {
-        requestUrl = requestUrl + 'armeabi-v7a/releases/tags/' + version
+        requestUrl = requestUrl + "armeabi-v7a/releases/tags/" + version;
       }
-      const res = await fetch(requestUrl)
-      const result = await res.json()
+      const res = await fetch(requestUrl);
+      const result = await res.json();
 
       var values = {
         build_date: null,
@@ -75,90 +80,90 @@ export default function DownloadIfl() {
           clone: null,
         },
         changelogs: null,
-      }
+      };
 
-      if (result.status != 'Not Found') {
-        const releaseBody = result.body.split('\n')
-        let changeLogs = []
+      if (result.status != "Not Found") {
+        const releaseBody = result.body.split("\n");
+        let changeLogs = [];
 
         releaseBody.forEach((line) => {
-          if (!line.startsWith('|') && line != '' && line != '# Changelog') {
-            changeLogs.push(line.trim().substring(2))
+          if (!line.startsWith("|") && line != "" && line != "# Changelog") {
+            changeLogs.push(line.trim().substring(2));
           } else {
-            const lineParts = line.split('|')
+            const lineParts = line.split("|");
             for (let i = 0; i < lineParts.length; i++) {
-              var part = lineParts[i].trim()
+              var part = lineParts[i].trim();
               if (
-                !part.includes('PROPERTY') &&
-                !part.includes('VALUE') &&
-                !part.includes('Changelog') &&
-                !part.includes('-------------') &&
+                !part.includes("PROPERTY") &&
+                !part.includes("VALUE") &&
+                !part.includes("Changelog") &&
+                !part.includes("-------------") &&
                 !part.length != 1
               ) {
-                var nextValue = lineParts[i + 1].trim()
+                var nextValue = lineParts[i + 1].trim();
                 switch (part) {
-                  case 'build_date':
-                    values.build_date = nextValue
-                    break
-                  case 'gen_id':
-                    values.gen_id = nextValue
-                    break
-                  case 'app.arch':
-                    values.app.arch = nextValue
-                    break
-                  case 'app.ifl_version':
-                    values.app.ifl_version = nextValue
-                    break
-                  case 'app.version_name':
-                    values.app.version_name = nextValue
-                    break
-                  case 'app.version_code':
-                    values.app.version_code = nextValue
-                    break
-                  case 'hash.uc':
-                    values.hash.uc = nextValue
-                    break
-                  case 'hash.c':
-                    values.hash.c = nextValue
-                    break
+                  case "build_date":
+                    values.build_date = nextValue;
+                    break;
+                  case "gen_id":
+                    values.gen_id = nextValue;
+                    break;
+                  case "app.arch":
+                    values.app.arch = nextValue;
+                    break;
+                  case "app.ifl_version":
+                    values.app.ifl_version = nextValue;
+                    break;
+                  case "app.version_name":
+                    values.app.version_name = nextValue;
+                    break;
+                  case "app.version_code":
+                    values.app.version_code = nextValue;
+                    break;
+                  case "hash.uc":
+                    values.hash.uc = nextValue;
+                    break;
+                  case "hash.c":
+                    values.hash.c = nextValue;
+                    break;
                 }
               }
             }
           }
-        })
+        });
 
         result.assets.forEach((asset) => {
-          if (asset.name.includes('instafel_uc')) {
-            values.download_urls.unclone = asset.browser_download_url
+          if (asset.name.includes("instafel_uc")) {
+            values.download_urls.unclone = asset.browser_download_url;
           }
 
-          if (asset.name.includes('instafel_c')) {
-            values.download_urls.clone = asset.browser_download_url
+          if (asset.name.includes("instafel_c")) {
+            values.download_urls.clone = asset.browser_download_url;
           }
-        })
-        values.changelogs = changeLogs
-        console.log(changeLogs)
-        setData(values)
+        });
+        values.changelogs = changeLogs;
+        console.log(changeLogs);
+        setData(values);
       } else {
-        setData(null)
+        setData(null);
       }
-    }
-    fetchData()
-  }, [])
+    };
+    fetchData();
+  }, []);
 
   const download = (url) => {
-    const link = document.createElement('a')
-    link.href = url
-    document.body.appendChild(link)
-    link.click()
-    document.body.removeChild(link)
-  }
+    const link = document.createElement("a");
+    link.href = url;
+    document.body.appendChild(link);
+    link.click();
+    document.body.removeChild(link);
+  };
 
   return (
     <AnimatePresence>
       {data ? (
         <div>
-          {' '}
+          {" "}
           <div className="min-h-screen  font-sans">
             <div className="container mx-auto px-4 pt-20 text-center">
               <motion.h1
@@ -166,7 +171,7 @@ export default function DownloadIfl() {
                 animate={{ opacity: 1, y: 0 }}
                 transition={{
                   duration: 0.8,
-                  ease: 'easeInOut',
+                  ease: "easeInOut",
                 }}
                 className="mb-2 text-5xl font-extrabold tracking-tight sm:text-6xl md:text-7xl"
               >
@@ -177,11 +182,11 @@ export default function DownloadIfl() {
                 animate={{ opacity: 1, y: 0 }}
                 transition={{
                   duration: 0.8,
-                  ease: 'easeInOut',
+                  ease: "easeInOut",
                 }}
                 className="mb-2 text-3xl font-bold tracking-tight sm:text-4xl md:text-5xl"
               >
-                v{data ? data.app.ifl_version : '...'}
+                v{data ? data.app.ifl_version : "..."}
               </motion.h1>
               <motion.p
                 initial={{ opacity: 0, y: 30 }}
@@ -189,7 +194,7 @@ export default function DownloadIfl() {
                 transition={{
                   delay: 0.5,
                   duration: 0.6,
-                  ease: 'easeOut',
+                  ease: "easeOut",
                 }}
                 className="mx-auto mt-4 max-w-2xl text-xl text-muted-foreground"
               >
@@ -203,7 +208,7 @@ export default function DownloadIfl() {
                 transition={{
                   delay: 0.8,
                   duration: 0.8,
-                  ease: 'easeOut',
+                  ease: "easeOut",
                 }}
               >
                 <div className="mt-12 flex flex-col items-center justify-center gap-4 sm:flex-row">
@@ -239,7 +244,7 @@ export default function DownloadIfl() {
               transition={{
                 delay: 1.2,
                 duration: 0.8,
-                ease: 'easeOut',
+                ease: "easeOut",
               }}
             >
               <div className="container mx-auto px-4 mt-12 pb-12">
@@ -290,7 +295,7 @@ export default function DownloadIfl() {
                                 <div className="flex items-center gap-3">
                                   <ArrowRight className="h-5 w-5 text-primary" />
                                   <span>
-                                    {' '}
+                                    {" "}
                                     Installed instead of regular Instagram
                                   </span>
                                 </div>
@@ -392,7 +397,7 @@ export default function DownloadIfl() {
                                   Architecture
                                 </TableCell>
                                 <TableCell>
-                                  {data ? data.app.arch : '...'}
+                                  {data ? data.app.arch : "..."}
                                 </TableCell>
                               </TableRow>
                               <TableRow>
@@ -402,15 +407,15 @@ export default function DownloadIfl() {
                                 <TableCell>
                                   {data
                                     ? new Date(parseInt(data.build_date))
-                                        .toLocaleString('en-US', {
-                                          day: '2-digit',
-                                          month: '2-digit',
-                                          year: 'numeric',
-                                          hour: '2-digit',
-                                          minute: '2-digit',
+                                        .toLocaleString("en-US", {
+                                          day: "2-digit",
+                                          month: "2-digit",
+                                          year: "numeric",
+                                          hour: "2-digit",
+                                          minute: "2-digit",
                                         })
-                                        .replace(',', '')
-                                    : '...'}
+                                        .replace(",", "")
+                                    : "..."}
                                 </TableCell>
                               </TableRow>
                               <TableRow>
@@ -418,7 +423,7 @@ export default function DownloadIfl() {
                                   IFL Version
                                 </TableCell>
                                 <TableCell>
-                                  v{data ? data.app.ifl_version : '...'}
+                                  v{data ? data.app.ifl_version : "..."}
                                 </TableCell>
                               </TableRow>
                               <TableRow>
@@ -426,7 +431,7 @@ export default function DownloadIfl() {
                                   IG Version
                                 </TableCell>
                                 <TableCell>
-                                  v{data ? data.app.version_name : '...'}
+                                  v{data ? data.app.version_name : "..."}
                                 </TableCell>
                               </TableRow>
                               <TableRow>
@@ -434,7 +439,7 @@ export default function DownloadIfl() {
                                   IG Ver-code
                                 </TableCell>
                                 <TableCell>
-                                  {data ? data.app.version_code : '...'}
+                                  {data ? data.app.version_code : "..."}
                                 </TableCell>
                               </TableRow>
                               <TableRow>
@@ -442,7 +447,7 @@ export default function DownloadIfl() {
                                   Generation ID
                                 </TableCell>
                                 <TableCell>
-                                  {data ? data.gen_id.split('-')[0] : '...'}
+                                  {data ? data.gen_id.split("-")[0] : "..."}
                                 </TableCell>
                               </TableRow>
                               <TableRow>
@@ -450,7 +455,7 @@ export default function DownloadIfl() {
                                   MD5 Hash (UC)
                                 </TableCell>
                                 <TableCell>
-                                  {data ? data.hash.uc : '...'}
+                                  {data ? data.hash.uc : "..."}
                                 </TableCell>
                               </TableRow>
                               <TableRow>
@@ -458,7 +463,7 @@ export default function DownloadIfl() {
                                   MD5 Hash (C)
                                 </TableCell>
                                 <TableCell>
-                                  {data ? data.hash.c : '...'}
+                                  {data ? data.hash.c : "..."}
                                 </TableCell>
                               </TableRow>
                             </TableBody>
@@ -493,20 +498,20 @@ export default function DownloadIfl() {
                           <div>
                             <div className="mb-2 flex items-center gap-2">
                               <Badge>
-                                {' '}
-                                v{data ? data.app.ifl_version : '...'}
+                                {" "}
+                                v{data ? data.app.ifl_version : "..."}
                               </Badge>
                               <span className="text-sm text-muted-foreground">
-                                Released on{' '}
+                                Released on{" "}
                                 {data
                                   ? new Date(parseInt(data.build_date))
-                                      .toLocaleString('en-US', {
-                                        day: '2-digit',
-                                        month: '2-digit',
-                                        year: 'numeric',
+                                      .toLocaleString("en-US", {
+                                        day: "2-digit",
+                                        month: "2-digit",
+                                        year: "numeric",
                                       })
-                                      .replace(',', '')
-                                  : '...'}
+                                      .replace(",", "")
+                                  : "..."}
                               </span>
                             </div>
                             <ul className="space-y-2">
@@ -539,5 +544,5 @@ export default function DownloadIfl() {
         <LoadingBar />
       )}
     </AnimatePresence>
-  )
+  );
 }

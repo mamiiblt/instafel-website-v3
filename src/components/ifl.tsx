@@ -1,5 +1,5 @@
-import Link from 'next/link'
-import { Instagram, InstagramLoading } from './Icons'
+import Link from "next/link";
+import { Instagram, InstagramLoading } from "./Icons";
 
 export function LoadingBar() {
   return (
@@ -9,5 +9,5 @@ export function LoadingBar() {
         <InstagramLoading className="relative h-14 w-14 animate-spin" />
       </div>
     </div>
-  )
+  );
 }

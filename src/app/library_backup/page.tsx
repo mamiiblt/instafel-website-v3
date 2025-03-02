@@ -1,37 +1,37 @@
-'use client'
+"use client";
 
-import { AnimatePresence, motion } from 'framer-motion'
-import Link from 'next/link'
-import { Book, IflLibraryBackup } from '@/components/Icons'
-import { getAllPostsSync, getInstafelBackups } from '@/lib/blog'
-import { useEffect, useState } from 'react'
-import { LoadingBar } from '@/components/ifl'
-import { Separator } from '@radix-ui/react-dropdown-menu'
-import Footer from '@/components/Footer'
+import { AnimatePresence, motion } from "framer-motion";
+import Link from "next/link";
+import { Book, IflLibraryBackup } from "@/components/Icons";
+import { getAllPostsSync, getInstafelBackups } from "@/lib/blog";
+import { useEffect, useState } from "react";
+import { LoadingBar } from "@/components/ifl";
+import { Separator } from "@radix-ui/react-dropdown-menu";
+import Footer from "@/components/Footer";
 
 interface Backup {
-  id: string
-  name: string
-  author: string
+  id: string;
+  name: string;
+  author: string;
 }
 
 interface BackupInfo {
-  tag_name: string
-  backups: Backup[]
+  tag_name: string;
+  backups: Backup[];
 }
 
 export default function LibraryBackupPage() {
-  const [data, setData] = useState<BackupInfo | null>(null)
+  const [data, setData] = useState<BackupInfo | null>(null);
   useEffect(() => {
     const fetchData = async () => {
       var requestUrl =
-        'https://raw.githubusercontent.com/instafel/backups/refs/heads/main/backups.json'
-      const res = await fetch(requestUrl)
-      const result: BackupInfo = await res.json()
-      setData(result)
-    }
-    fetchData()
-  }, [])
+        "https://raw.githubusercontent.com/instafel/backups/refs/heads/main/backups.json";
+      const res = await fetch(requestUrl);
+      const result: BackupInfo = await res.json();
+      setData(result);
+    };
+    fetchData();
+  }, []);
 
   return (
     <AnimatePresence>
@@ -45,7 +45,7 @@ export default function LibraryBackupPage() {
                   animate={{ opacity: 1, y: 0 }}
                   transition={{
                     duration: 0.8,
-                    ease: 'easeOut',
+                    ease: "easeOut",
                   }}
                   className="bg-gray-600 text-white p-3 rounded-lg inline-block mb-4"
                 >
@@ -56,7 +56,7 @@ export default function LibraryBackupPage() {
                   animate={{ opacity: 1, y: 0 }}
                   transition={{
                     duration: 0.8,
-                    ease: 'easeInOut',
+                    ease: "easeInOut",
                   }}
                   className="text-3xl font-bold mb-4"
                 >
@@ -68,7 +68,7 @@ export default function LibraryBackupPage() {
                   transition={{
                     delay: 0.5,
                     duration: 0.6,
-                    ease: 'easeOut',
+                    ease: "easeOut",
                   }}
                   className="text-muted-foreground  max-w-2xl mx-auto"
                 >
@@ -84,7 +84,7 @@ export default function LibraryBackupPage() {
                 transition={{
                   delay: 1,
                   duration: 0.8,
-                  ease: 'easeOut',
+                  ease: "easeOut",
                 }}
               >
                 <div className="bg-white rounded-xl shadow-md overflow-hidden">
@@ -99,7 +99,7 @@ export default function LibraryBackupPage() {
                           transition={{
                             delay: index * 0.15,
                             duration: 0.6,
-                            ease: 'easeOut',
+                            ease: "easeOut",
                           }}
                         >
                           <a
@@ -132,5 +132,5 @@ export default function LibraryBackupPage() {
         <LoadingBar />
       )}
     </AnimatePresence>
-  )
+  );
 }

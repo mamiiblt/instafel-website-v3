@@ -1,6 +1,6 @@
-'use client'
+"use client";
 
-import { motion, AnimatePresence } from 'framer-motion'
+import { motion, AnimatePresence } from "framer-motion";
 import {
   Book,
   IflDownload,
@@ -12,11 +12,11 @@ import {
   Instagram,
   Notification,
   Telegram,
-} from '@/components/Icons'
-import { Button } from '@/components/ui/button'
-import Image from 'next/image'
-import Link from 'next/link'
-import Footer from '@/components/Footer'
+} from "@/components/Icons";
+import { Button } from "@/components/ui/button";
+import Image from "next/image";
+import Link from "next/link";
+import Footer from "@/components/Footer";
 
 export default function Home() {
   return (
@@ -30,7 +30,7 @@ export default function Home() {
                 animate={{ opacity: 1, y: 0 }}
                 transition={{
                   duration: 0.8,
-                  ease: 'easeInOut',
+                  ease: "easeInOut",
                 }}
                 className="text-5xl md:text-6xl font-bold mb-6 max-w-3xl"
               >
@@ -42,12 +42,12 @@ export default function Home() {
                 transition={{
                   delay: 0.5,
                   duration: 0.8,
-                  ease: 'easeOut',
+                  ease: "easeOut",
                 }}
                 className="text-muted-foreground  mb-6 text-xl max-w-xl"
               >
                 You can try out latest Alpha builds as quickly as possible with
-                Instafel Project{' '}
+                Instafel Project{" "}
               </motion.p>
               <motion.div
                 initial={{ opacity: 0, y: 30 }}
@@ -55,13 +55,13 @@ export default function Home() {
                 transition={{
                   delay: 0.7,
                   duration: 0.8,
-                  ease: 'easeOut',
+                  ease: "easeOut",
                 }}
               >
                 <div className="flex space-x-4 mb-16">
                   <Button
                     asChild
-                    size={'lg'}
+                    size={"lg"}
                     variant="default"
                     className="w-full sm:w-auto transform hover:scale-105 transition-transform duration-200"
                   >
@@ -72,7 +72,7 @@ export default function Home() {
                   </Button>
                   <Button
                     asChild
-                    size={'lg'}
+                    size={"lg"}
                     variant="outline-gradient"
                     className="w-full sm:w-auto transform hover:scale-105 transition-transform duration-200"
                   >
@@ -90,7 +90,7 @@ export default function Home() {
                 transition={{
                   delay: 0.9,
                   duration: 0.8,
-                  ease: 'easeOut',
+                  ease: "easeOut",
                 }}
               >
                 <Image
@@ -115,33 +115,33 @@ export default function Home() {
                 {[
                   {
                     icon: <Instagram />,
-                    title: 'Clone Support',
+                    title: "Clone Support",
                     desc: "If you don't want to install the Alpha versions instead of the Instagram, you can install it as a secondary app!",
                   },
                   {
                     icon: <IflFeature_OTAUpdates />,
-                    title: 'OTA Updates',
-                    desc: 'You can update Instafel flawlessly using the in-app updater or the automatic update plugin Instafel Updater',
+                    title: "OTA Updates",
+                    desc: "You can update Instafel flawlessly using the in-app updater or the automatic update plugin Instafel Updater",
                   },
                   {
                     icon: <IflFeature_RemoveAds />,
-                    title: 'Ads Removed',
-                    desc: 'Use it comfortably without any ads in the app!',
+                    title: "Ads Removed",
+                    desc: "Use it comfortably without any ads in the app!",
                   },
                   {
                     icon: <IflFeature_CrashReports />,
-                    title: 'Crash Reports',
-                    desc: 'It is very common for the application to crash when using Alpha versions, Instafel always keeps a crash report for such cases',
+                    title: "Crash Reports",
+                    desc: "It is very common for the application to crash when using Alpha versions, Instafel always keeps a crash report for such cases",
                   },
                   {
                     icon: <IflLibrary />,
-                    title: 'Libraries',
-                    desc: 'You can find useful flags, backups in Instafel Library!',
+                    title: "Libraries",
+                    desc: "You can find useful flags, backups in Instafel Library!",
                   },
                   {
                     icon: <IflFeature_32BitSupport />,
-                    title: '32-bit Support',
-                    desc: 'Instafel always offer support for nearly obsolete 32-bit devices!',
+                    title: "32-bit Support",
+                    desc: "Instafel always offer support for nearly obsolete 32-bit devices!",
                   },
                 ].map((feature, idx) => (
                   <motion.div
@@ -151,7 +151,7 @@ export default function Home() {
                     transition={{
                       delay: idx * 0.15,
                       duration: 0.5,
-                      ease: 'easeOut',
+                      ease: "easeOut",
                     }}
                     className="bg-gray-100 p-6 rounded-xl"
                     whileHover={{ scale: 1.02 }}
@@ -234,5 +234,5 @@ export default function Home() {
       </div>
       <Footer />
     </main>
-  )
+  );
 }
