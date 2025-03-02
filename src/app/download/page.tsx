@@ -38,8 +38,12 @@ import { LoadingBar } from '@/components/ifl'
 import Footer from '@/components/Footer'
 
 export default function DownloadPage() {
-  const searchParams = useSearchParams()
-  const version = searchParams.get('version')
+  const [version, setVersion] = useState('null')
+
+  useEffect(() => {
+    const params = new URLSearchParams(window.location.search)
+    setVersion(params.get('version') ?? 'null')
+  }, [])
 
   const [data, setData] = useState(null)
   useEffect(() => {

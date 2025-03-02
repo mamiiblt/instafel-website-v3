@@ -36,10 +36,14 @@ import Footer from '@/components/Footer'
 
 export default function DownloadIfl() {
   const [activeTab, setActiveTab] = useState('download')
+  const [version, setVersion] = useState('null')
+  const [arch, setArch] = useState('null')
 
-  const searchParams = useSearchParams()
-  const version = searchParams.get('version')
-  const arch = searchParams.get('arch')
+  useEffect(() => {
+    const params = new URLSearchParams(window.location.search)
+    setVersion(params.get('version') ?? 'null')
+    setArch(params.get('arch') ?? 'null')
+  }, [])
 
   const [data, setData] = useState(null)
   useEffect(() => {

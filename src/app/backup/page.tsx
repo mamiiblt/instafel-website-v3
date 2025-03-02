@@ -35,11 +35,13 @@ interface Resp {
 }
 
 export default function LibraryBackupPage() {
-  const searchParams = useSearchParams()
-  const [isChangelogExpanded, setIsChangelogExpanded] = useState(false)
-  const id = searchParams.get('id') ?? 'null'
-
+  const [id, setId] = useState('null')
   const [data, setData] = useState<Resp | null>(null)
+
+  useEffect(() => {
+    const params = new URLSearchParams(window.location.search)
+    setId(params.get('id') ?? 'null')
+  }, [])
 
   useEffect(() => {
     const fetchData = async () => {
