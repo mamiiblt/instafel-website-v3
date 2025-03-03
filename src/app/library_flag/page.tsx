@@ -101,7 +101,7 @@ export default function LibraryBackupPage() {
   ];
 
   const handleCategoryClick = (categoryId: number) => {
-    router.push(`/flags?category=${categoryId}`);
+    router.push(`/flags?category=${categoryId}&page=1`);
   };
 
   const getColorClasses = (color: string, isHovered: boolean) => {
@@ -218,7 +218,7 @@ export default function LibraryBackupPage() {
               initial={{ opacity: 0, y: 30 }}
               animate={{ opacity: 1, y: 0 }}
               transition={{
-                delay: 0.3,
+                delay: 0.2,
                 duration: 0.8,
                 ease: "easeOut",
               }}
@@ -243,7 +243,7 @@ export default function LibraryBackupPage() {
                   initial={{ opacity: 0, y: 30 }}
                   animate={{ opacity: 1, y: 0 }}
                   transition={{
-                    delay: category.id * 0.15,
+                    delay: 0.4 + category.id * 0.15,
                     duration: 0.8,
                     ease: "easeOut",
                   }}
