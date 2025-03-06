@@ -1,11 +1,24 @@
 "use client";
 
 import { AnimatePresence, motion } from "framer-motion";
-import { Suspense, useEffect, useState } from "react";
-import { LoadingBar } from "@/components/ifl";
+import React, { Suspense, useEffect, useState } from "react";
+import { LoadingBar, LoadingBarNotCenter } from "@/components/ifl";
 import Footer from "@/components/Footer";
 import { useRouter, useSearchParams } from "next/navigation";
-import { ArrowRight, Calendar, Search, User } from "lucide-react";
+import {
+  ArrowRight,
+  Calendar,
+  Delete,
+  Flag,
+  IdCard,
+  Search,
+  TagIcon,
+  Trash,
+  User,
+  X,
+} from "lucide-react";
+import Link from "next/link";
+import { Button } from "@/components/ui/button";
 
 export default function FlagListPage() {
   return (
@@ -32,16 +45,19 @@ const categories = [
 
 interface Info {
   page_size: number;
+  fl_enabled: boolean;
   total_flag_size: number;
+  filtered_flag_size: number;
   authors_of_all_flags: string[];
 }
 
 interface Flag {
-  id: number;
-  name: string;
-  adder: string;
-  fnames: string;
-  adate: string;
+  i: number;
+  n: string;
+  a: string;
+  f: string;
+  ad: string;
+  r: boolean;
 }
 
 interface ResponseScheme {
@@ -57,66 +73,76 @@ function FlagListPageContent() {
 
   const searchParams = useSearchParams();
   const categoryId = searchParams.get("category") ?? "0";
-  const [pageNumber, setPageNumber] = useState(
-    parseInt(searchParams.get("page") ?? "0")
-  );
-  const filterAuthorName = searchParams.get("flName") ?? "";
-  const filterByName = searchParams.get("flByName") ?? false;
-  const filterSearchData = searchParams.get("flSearch") ?? "";
-  const [searchQuery, setSearchQuery] = useState(filterSearchData);
-  const [selectedUser, setSelectedUser] = useState(filterAuthorName);
-
+  const [pageNumber, setPageNumber] = useState(1);
+  const [paramSelectedUser, setParamSelectedUser] = useState("");
+  const [paramSearchQuery, setParamSearchQuery] = useState("");
+  const [refreshData, setRefreshData] = useState(true);
+  const [hasAnimated, setHasAnimated] = useState(false);
+  const [recallAPI, setRecallAPI] = useState(false);
   const [data, setData] = useState<ResponseScheme | null>(null);
 
   useEffect(() => {
+    setRefreshData(true);
     const fetchData = async () => {
-      var requestUrl = `https://orange-carnival-j9w5x9x6wp7f57ww-3000.app.github.dev/ifl/flags/list?category=${categoryId}&page=${pageNumber}`;
-      if (selectedUser.trim() != "" && selectedUser != "empty") {
-        requestUrl = requestUrl + `&flName=${selectedUser}`;
+      // var requestUrl = `https://stunning-palm-tree-x4j74qgwjvqh664v-3020.app.github.dev/list?category=${categoryId}&page=${pageNumber}`;
+      var requestUrl = `https://iflagapi.mamiiiblt.me/list?category=${categoryId}&page=${pageNumber}`;
+
+      if (paramSelectedUser.trim() != "") {
+        requestUrl = requestUrl + `&flName=${paramSelectedUser}`;
       }
 
-      if (searchQuery.toString() != "") {
+      if (paramSearchQuery.toString() != "") {
         requestUrl =
-          requestUrl + `&flSearch=${encodeURIComponent(searchQuery)}`;
+          requestUrl + `&flSearch=${encodeURIComponent(paramSearchQuery)}`;
       }
       const res = await fetch(requestUrl);
       const result: ResponseScheme = await res.json();
       setData(result);
+      setRefreshData(false);
     };
     fetchData();
-  }, [data]);
+  }, [recallAPI]);
 
   useEffect(() => {
-    if (selectedUser) {
-      reRoute();
+    if (refreshData == false) {
+      setHasAnimated(true);
     }
-  }, [selectedUser]);
+  }, [refreshData]);
 
   useEffect(() => {
-    if (pageNumber) {
-      reRoute();
+    if (pageNumber == 2589) {
+      setPageNumber(1);
+    } else {
+      setRecallAPI(!recallAPI);
     }
   }, [pageNumber]);
-
-  const reRoute = () => {
-    var url = `/flags?category=${categoryId}&page=${pageNumber}`;
-
-    if (selectedUser.trim() != "" && selectedUser != "empty") {
-      url = url + `&flName=${selectedUser}`;
-    }
-
-    if (searchQuery.toString() != "") {
-      url = url + `&flSearch=${encodeURIComponent(searchQuery)}`;
-    }
-
-    router.push(url);
-  };
 
   const searchEvent = (event: React.KeyboardEvent<HTMLInputElement>) => {
     if (event.key === "Enter") {
       event.preventDefault();
-      reRoute();
+      setPageNumber(2589);
     }
+  };
+
+  const changeSelectedUser = (newUser: string) => {
+    setParamSelectedUser(newUser);
+    setPageNumber(2589);
+  };
+
+  const changePageNumberFromPagination = (newPageNum: number) => {
+    setPageNumber(newPageNum);
+  };
+
+  const clearFilters = () => {
+    setParamSelectedUser("");
+    setParamSearchQuery("");
+    setPageNumber(2589);
+  };
+
+  const handleChange = (event: React.ChangeEvent<HTMLInputElement>) => {
+    const input = event.target.value;
+    const formattedInput = input.replace(/\s+/g, " ").replace(/ /g, "_");
+    setParamSearchQuery(formattedInput);
   };
 
   return (
@@ -136,7 +162,7 @@ function FlagListPageContent() {
                   className="inline-flex items-center justify-center gap-2 px-4 py-1.5 rounded-full bg-gray-900/5 text-sm mb-6"
                 >
                   <span className="flex items-center gap-1.5">
-                    Instafel Flag Library
+                    Flag Library
                   </span>
                 </motion.div>
 
@@ -164,22 +190,46 @@ function FlagListPageContent() {
                   className="flex items-center justify-center gap-3 text-muted-foreground"
                 >
                   <div className="h-[1px] w-10" />
-                  {parseInt(categoryId) !== 0 ? (
-                    <p className="text-lg">
-                      There are a total of
-                      <span className="font-semibold text-gray-900">
-                        {" " + data.info.total_flag_size + " "}
-                      </span>
-                      flags in this category.
-                    </p>
+                  {data.info.fl_enabled === true ? (
+                    <div>
+                      {parseInt(categoryId) !== 0 ? (
+                        <p className="text-lg">
+                          There are a total of
+                          <span className="font-semibold text-gray-900">
+                            {" " + data.info.total_flag_size + " "}
+                          </span>
+                          flags in this category with filters.
+                        </p>
+                      ) : (
+                        <p className="text-lg">
+                          There are a total of
+                          <span className="font-semibold text-gray-900">
+                            {" " + data.info.total_flag_size + " "}
+                          </span>
+                          in flag library with filters.
+                        </p>
+                      )}
+                    </div>
                   ) : (
-                    <p className="text-lg">
-                      There are a total of
-                      <span className="font-semibold text-gray-900">
-                        {" " + data.info.total_flag_size + " "}
-                      </span>
-                      in flag library.
-                    </p>
+                    <div>
+                      {parseInt(categoryId) !== 0 ? (
+                        <p className="text-lg">
+                          There are a total of
+                          <span className="font-semibold text-gray-900">
+                            {" " + data.info.total_flag_size + " "}
+                          </span>
+                          flags in this category
+                        </p>
+                      ) : (
+                        <p className="text-lg">
+                          There are a total of
+                          <span className="font-semibold text-gray-900">
+                            {" " + data.info.total_flag_size + " "}
+                          </span>
+                          in flag library
+                        </p>
+                      )}
+                    </div>
                   )}
                   <div className="h-[1px] w-10" />
                 </motion.div>
@@ -199,9 +249,9 @@ function FlagListPageContent() {
                   <div className="flex-1 relative">
                     <input
                       type="text"
-                      placeholder="Search in category..."
-                      value={searchQuery}
-                      onChange={(e) => setSearchQuery(e.target.value)}
+                      placeholder="Search by flag name..."
+                      value={paramSearchQuery}
+                      onChange={handleChange}
                       onKeyDown={searchEvent}
                       className="w-full pl-10 pr-4 py-2 rounded-lg border border-gray-200 focus:border-gray-300 focus:ring-0 focus:outline-none"
                     />
@@ -220,7 +270,7 @@ function FlagListPageContent() {
                     </svg>
                   </div>
                   <button
-                    onClick={reRoute}
+                    onClick={() => setPageNumber(2589)}
                     className="px-3 py-3 bg-gray-900 text-white rounded-lg hover:bg-gray-800 transition-colors flex items-center"
                   >
                     <Search className="w-5 h-5" />
@@ -239,11 +289,11 @@ function FlagListPageContent() {
                 >
                   <div className="relative">
                     <select
-                      value={selectedUser || "empty"}
-                      onChange={(e) => setSelectedUser(e.target.value)}
+                      value={paramSelectedUser || ""}
+                      onChange={(e) => changeSelectedUser(e.target.value)}
                       className="appearance-none pl-8 pr-2 py-2 rounded-lg border border-gray-200 focus:border-gray-300 focus:ring-0 focus:outline-none text-sm font-medium bg-white text-gray-700"
                     >
-                      <option value="empty">All Users</option>
+                      <option value="">All Users</option>
                       {data.info.authors_of_all_flags.map((user, index) => (
                         <option key={index} value={user}>
                           {user}
@@ -253,50 +303,119 @@ function FlagListPageContent() {
 
                     <User className="w-4 h-4 absolute left-3 top-1/2 -translate-y-1/2 text-gray-400" />
                   </div>
+
+                  {data.info.fl_enabled === true && (
+                    <div className="relative">
+                      <Button
+                        onClick={clearFilters}
+                        className="appearance-none pl-8 pr-2 py-2 rounded-lg border border-gray-200 text-sm font-medium bg-white text-gray-700"
+                      >
+                        Clear Filters
+                      </Button>
+
+                      <X className="w-4 h-4 absolute left-3 top-1/2 -translate-y-1/2 text-gray-400" />
+                    </div>
+                  )}
                 </motion.div>
               </div>
 
-              <div className="grid gap-4 mb-6">
-                {data.flags.map((flag, index) => (
-                  <motion.div
-                    key={index}
-                    initial={{ opacity: 0, y: 30 }}
-                    animate={{ opacity: 1, y: 0 }}
-                    transition={{
-                      delay: 0.6 + index * 0.2,
-                      duration: 0.8,
-                      ease: "easeInOut",
-                    }}
-                    onMouseEnter={() => setHoveredId(index)}
-                    onMouseLeave={() => setHoveredId(null)}
-                    className="group relative"
-                  >
-                    {" "}
-                    <div
-                      className={`
-            relative overflow-hidden bg-white rounded-xl border border-gray-200
-            transition-all duration-300
-            ${hoveredId === index ? "shadow-lg scale-[1.01]" : "hover:shadow"}
-          `}
-                    >
-                      <div className="p-4 sm:p-6">
-                        <div className="flex items-start justify-between">
-                          <div className="flex-1">
-                            <div className="flex items-center gap-3 mb-2">
-                              <h3 className="text-lg font-semibold text-gray-900">
-                                {flag.name}
-                              </h3>
-                            </div>
-                            <div className="flex items-center gap-3 mb-2">
-                              <h3 className="text-sm font-semibold text-gray-900">
-                                {flag.fnames}
-                              </h3>
-                            </div>
+              {refreshData === false ? (
+                <motion.div
+                  initial={{ opacity: 0, y: hasAnimated ? 0 : 30 }}
+                  animate={{ opacity: 1, y: 0 }}
+                  transition={
+                    hasAnimated
+                      ? {}
+                      : { delay: 0.6, duration: 0.8, ease: "easeInOut" }
+                  }
+                  className="grid gap-4 mb-6"
+                >
+                  <div className="grid gap-4 mb-6">
+                    {data.flags.map((flag, index) => (
+                      <Link
+                        key={index}
+                        href={"/flag?id=" + flag.i}
+                        className="group relative"
+                      >
+                        <div
+                          className={`
+          relative overflow-hidden bg-white rounded-xl border border-gray-200
+          transition-all duration-300
+          ${hoveredId === index ? "shadow-lg scale-[1.01]" : "hover:shadow"}
+        `}
+                        >
+                          <div className="p-4 sm:p-6">
+                            <div className="flex items-start justify-between">
+                              <div className="flex-1">
+                                <div className="flex items-center gap-3">
+                                  <h3 className="text-lg font-semibold text-gray-900">
+                                    {flag.n}
+                                  </h3>
+                                </div>
+                                <div className="flex items-center gap-3 mb-2">
+                                  <h3 className="text-sm font-regular text-gray-900">
+                                    {flag.f}
+                                  </h3>
+                                </div>
 
-                            <div className="flex items-center gap-4 text-sm text-gray-500">
-                              <div className="flex items-center gap-2">
+                                <div className="flex items-center gap-4 text-sm text-gray-500">
+                                  <div className="flex items-center gap-2">
+                                    <svg
+                                      className="w-4 h-4"
+                                      fill="none"
+                                      stroke="currentColor"
+                                      viewBox="0 0 24 24"
+                                    >
+                                      <path
+                                        strokeLinecap="round"
+                                        strokeLinejoin="round"
+                                        strokeWidth={1.5}
+                                        d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z"
+                                      />
+                                    </svg>
+                                    {flag.a}
+                                  </div>
+                                  <div className="flex items-center gap-2">
+                                    <svg
+                                      className="w-4 h-4"
+                                      fill="none"
+                                      stroke="currentColor"
+                                      viewBox="0 0 24 24"
+                                    >
+                                      <path
+                                        strokeLinecap="round"
+                                        strokeLinejoin="round"
+                                        strokeWidth={1.5}
+                                        d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z"
+                                      />
+                                    </svg>
+                                    {new Date(flag.ad).toLocaleDateString(
+                                      "en-US"
+                                    )}
+                                  </div>
+                                  <div className="flex items-center gap-2">
+                                    <IdCard className="w-4 h-4" />
+                                    {flag.i}
+                                  </div>
+                                  {flag.r === true && (
+                                    <div className="flex items-center gap-2">
+                                      <Trash className="w-4 h-4" />
+                                      Removed
+                                    </div>
+                                  )}
+                                </div>
+                              </div>
+
+                              <button
+                                className={`
+                  p-2 rounded-lg text-gray-400
+                  transition-all duration-300 ease-in-out
+                  hover:text-gray-900 hover:bg-gray-100
+                  ${hoveredId === flag.i ? "opacity-100" : "opacity-0"}
+                `}
+                              >
                                 <svg
-                                  className="w-4 h-4"
+                                  className="w-5 h-5"
                                   fill="none"
                                   stroke="currentColor"
                                   viewBox="0 0 24 24"
@@ -305,73 +424,46 @@ function FlagListPageContent() {
                                     strokeLinecap="round"
                                     strokeLinejoin="round"
                                     strokeWidth={1.5}
-                                    d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z"
+                                    d="M9 5l7 7-7 7"
                                   />
                                 </svg>
-                                Added by {flag.adder}
-                              </div>
-                              <div className="flex items-center gap-2">
-                                <svg
-                                  className="w-4 h-4"
-                                  fill="none"
-                                  stroke="currentColor"
-                                  viewBox="0 0 24 24"
-                                >
-                                  <path
-                                    strokeLinecap="round"
-                                    strokeLinejoin="round"
-                                    strokeWidth={1.5}
-                                    d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z"
-                                  />
-                                </svg>
-                                {flag.adate}
-                              </div>
+                              </button>
                             </div>
                           </div>
 
-                          <button
+                          <div
                             className={`
-                    p-2 rounded-lg text-gray-400
-                    transition-all duration-300 ease-in-out
-                    hover:text-gray-900 hover:bg-gray-100
-                    ${hoveredId === flag.id ? "opacity-100" : "opacity-0"}
-                  `}
-                          >
-                            <svg
-                              className="w-5 h-5"
-                              fill="none"
-                              stroke="currentColor"
-                              viewBox="0 0 24 24"
-                            >
-                              <path
-                                strokeLinecap="round"
-                                strokeLinejoin="round"
-                                strokeWidth={1.5}
-                                d="M9 5l7 7-7 7"
-                              />
-                            </svg>
-                          </button>
+              absolute inset-0 
+              bg-gradient-to-tr from-gray-100/0 via-gray-100/0 to-gray-100/50
+              transition-opacity duration-300
+              ${hoveredId === flag.i ? "opacity-100" : "opacity-0"}
+            `}
+                          />
                         </div>
+                      </Link>
+                    ))}
+                  </div>
+                </motion.div>
+              ) : (
+                <div className="grid gap-4 mb-6 min-h-[400px] relative">
+                  <div className="absolute inset-0 flex flex-col items-center justify-center">
+                    <div className="relative">
+                      <div className="h-24 w-24 rounded-full border-t-2 border-b-2 border-gray-900 animate-spin"></div>
+                      <div className="absolute inset-0 flex items-center justify-center">
+                        <Flag className="w-10 h-10 text-gray900" />
                       </div>
-
-                      <div
-                        className={`
-                absolute inset-0 
-                bg-gradient-to-tr from-gray-100/0 via-gray-100/0 to-gray-100/50
-                transition-opacity duration-300
-                ${hoveredId === flag.id ? "opacity-100" : "opacity-0"}
-              `}
-                      />
                     </div>
-                  </motion.div>
-                ))}
-              </div>
+                    <p className="mt-4 text-gray-600 font-medium">Loading...</p>
+                  </div>
+                </div>
+              )}
 
-              {/* Pagination */}
               <div className="flex justify-center border-t border-gray-200 pt-4">
                 <div className="flex gap-2">
                   <button
-                    onClick={() => setPageNumber(pageNumber - 1)}
+                    onClick={() =>
+                      changePageNumberFromPagination(pageNumber - 1)
+                    }
                     disabled={pageNumber === 1}
                     className={`
                   p-2 rounded-lg border text-sm font-medium
@@ -398,7 +490,7 @@ function FlagListPageContent() {
                   </button>
                   {[...Array(data.info.page_size)].map((_, i) => (
                     <button
-                      onClick={() => setPageNumber(i + 1)}
+                      onClick={() => changePageNumberFromPagination(i + 1)}
                       key={i + 1}
                       className={`
                     w-10 h-10 rounded-lg border text-sm font-medium
@@ -414,7 +506,9 @@ function FlagListPageContent() {
                     </button>
                   ))}
                   <button
-                    onClick={() => setPageNumber(pageNumber + 1)}
+                    onClick={() =>
+                      changePageNumberFromPagination(pageNumber + 1)
+                    }
                     disabled={pageNumber === data.info.page_size}
                     className={`
                   p-2 rounded-lg border text-sm font-medium

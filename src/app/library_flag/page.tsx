@@ -101,7 +101,7 @@ export default function LibraryBackupPage() {
   ];
 
   const handleCategoryClick = (categoryId: number) => {
-    router.push(`/flags?category=${categoryId}&page=1`);
+    router.push(`/flags?category=${categoryId}`);
   };
 
   const getColorClasses = (color: string, isHovered: boolean) => {
