@@ -52,12 +52,14 @@ interface Info {
 }
 
 interface Flag {
-  i: number;
-  n: string;
-  a: string;
-  f: string;
-  ad: string;
-  r: boolean;
+  id: number;
+  name: string;
+  author: string;
+  category_id: number;
+  fnames: string;
+  addate: string;
+  rv: number;
+  rv_at: string;
 }
 
 interface ResponseScheme {
@@ -84,7 +86,7 @@ function FlagListPageContent() {
   useEffect(() => {
     setRefreshData(true);
     const fetchData = async () => {
-      // var requestUrl = `https://stunning-palm-tree-x4j74qgwjvqh664v-3020.app.github.dev/list?category=${categoryId}&page=${pageNumber}`;
+      // var requestUrl = `https://stunning-palm-tree-x4j74qgwjvqh664v-3040.app.github.dev/list?category=${categoryId}&page=${pageNumber}`;
       var requestUrl = `https://iflagapi.mamiiiblt.me/list?category=${categoryId}&page=${pageNumber}`;
 
       if (paramSelectedUser.trim() != "") {
@@ -97,6 +99,11 @@ function FlagListPageContent() {
       }
       const res = await fetch(requestUrl);
       const result: ResponseScheme = await res.json();
+      const sortedResult = result.flags.sort(
+        (a, b) => new Date(b.addate).getTime() - new Date(a.addate).getTime()
+      );
+      result.flags = sortedResult;
+
       setData(result);
       setRefreshData(false);
     };
@@ -145,6 +152,26 @@ function FlagListPageContent() {
     setParamSearchQuery(formattedInput);
   };
 
+  const getTypeColor = (type: string) => {
+    const colors = {
+      c0: "bg-blue-50 text-blue-600 border-blue-100",
+      c1: "bg-violet-50 text-violet-600 border-violet-100",
+      c2: "bg-emerald-50 text-emerald-600 border-emerald-100",
+      c3: "bg-orange-50 text-orange-600 border-orange-100",
+      c4: "bg-indigo-50 text-indigo-600 border-indigo-100",
+      c5: "bg-rose-50 text-rose-600 border-rose-100",
+      c6: "bg-fuchsia-50 text-fuchsia-600 border-fuchsia-100",
+      c7: "bg-amber-50 text-amber-600 border-amber-100",
+      c8: "bg-cyan-50 text-cyan-600 border-cyan-100",
+      c9: "bg-indigo-50 text-indigo-600 border-indigo-100",
+      c10: "bg-emerald-50 text-emerald-600 border-emerald-100",
+      c11: "bg-teal-50 text-teal-600 border-teal-100",
+    };
+    return (
+      colors[type as keyof typeof colors] ||
+      "bg-gray-50 text-gray-600 border-gray-100"
+    );
+  };
   return (
     <AnimatePresence>
       {data ? (
@@ -196,7 +223,7 @@ function FlagListPageContent() {
                         <p className="text-lg">
                           There are a total of
                           <span className="font-semibold text-gray-900">
-                            {" " + data.info.total_flag_size + " "}
+                            {" " + data.info.filtered_flag_size + " "}
                           </span>
                           flags in this category with filters.
                         </p>
@@ -204,7 +231,7 @@ function FlagListPageContent() {
                         <p className="text-lg">
                           There are a total of
                           <span className="font-semibold text-gray-900">
-                            {" " + data.info.total_flag_size + " "}
+                            {" " + data.info.filtered_flag_size + " "}
                           </span>
                           in flag library with filters.
                         </p>
@@ -253,7 +280,7 @@ function FlagListPageContent() {
                       value={paramSearchQuery}
                       onChange={handleChange}
                       onKeyDown={searchEvent}
-                      className="w-full pl-10 pr-4 py-2 rounded-lg border border-gray-200 focus:border-gray-300 focus:ring-0 focus:outline-none"
+                      className="w-full pl-10 pr-4 py-3 rounded-lg border border-gray-200 focus:border-gray-300 focus:ring-0 focus:outline-none"
                     />
                     <svg
                       className="w-5 h-5 absolute left-3 top-1/2 -translate-y-1/2 text-muted-foreground"
@@ -271,7 +298,7 @@ function FlagListPageContent() {
                   </div>
                   <button
                     onClick={() => setPageNumber(2589)}
-                    className="px-3 py-3 bg-gray-900 text-white rounded-lg hover:bg-gray-800 transition-colors flex items-center"
+                    className="px-4 py-3 bg-gray-900 text-white rounded-lg hover:bg-gray-800 transition-colors flex items-center"
                   >
                     <Search className="w-5 h-5" />
                   </button>
@@ -334,7 +361,7 @@ function FlagListPageContent() {
                     {data.flags.map((flag, index) => (
                       <Link
                         key={index}
-                        href={"/flag?id=" + flag.i}
+                        href={"/flag?id=" + flag.id}
                         className="group relative"
                       >
                         <div
@@ -346,19 +373,19 @@ function FlagListPageContent() {
                         >
                           <div className="p-4 sm:p-6">
                             <div className="flex items-start justify-between">
-                              <div className="flex-1">
+                              <div className="flex-12">
                                 <div className="flex items-center gap-3">
                                   <h3 className="text-lg font-semibold text-gray-900">
-                                    {flag.n}
+                                    {flag.name}
                                   </h3>
                                 </div>
                                 <div className="flex items-center gap-3 mb-2">
                                   <h3 className="text-sm font-regular text-gray-900">
-                                    {flag.f}
+                                    {flag.fnames}
                                   </h3>
                                 </div>
 
-                                <div className="flex items-center gap-4 text-sm text-gray-500">
+                                <div className="items-center gap-4 text-sm text-gray-500">
                                   <div className="flex items-center gap-2">
                                     <svg
                                       className="w-4 h-4"
@@ -373,7 +400,7 @@ function FlagListPageContent() {
                                         d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z"
                                       />
                                     </svg>
-                                    {flag.a}
+                                    Added by {flag.author}
                                   </div>
                                   <div className="flex items-center gap-2">
                                     <svg
@@ -389,18 +416,15 @@ function FlagListPageContent() {
                                         d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z"
                                       />
                                     </svg>
-                                    {new Date(flag.ad).toLocaleDateString(
-                                      "en-US"
+                                    Uploaded on{" "}
+                                    {new Date(flag.addate).toLocaleDateString(
+                                      "tr-TR"
                                     )}
                                   </div>
-                                  <div className="flex items-center gap-2">
-                                    <IdCard className="w-4 h-4" />
-                                    {flag.i}
-                                  </div>
-                                  {flag.r === true && (
+                                  {flag.rv === 1 && (
                                     <div className="flex items-center gap-2">
                                       <Trash className="w-4 h-4" />
-                                      Removed
+                                      Removed with v{flag.rv_at}
                                     </div>
                                   )}
                                 </div>
@@ -410,23 +434,18 @@ function FlagListPageContent() {
                                 className={`
                   p-2 rounded-lg text-gray-400
                   transition-all duration-300 ease-in-out
-                  hover:text-gray-900 hover:bg-gray-100
-                  ${hoveredId === flag.i ? "opacity-100" : "opacity-0"}
-                `}
+                  hover:text-gray-900 hover:bg-gray-100`}
                               >
-                                <svg
-                                  className="w-5 h-5"
-                                  fill="none"
-                                  stroke="currentColor"
-                                  viewBox="0 0 24 24"
-                                >
-                                  <path
-                                    strokeLinecap="round"
-                                    strokeLinejoin="round"
-                                    strokeWidth={1.5}
-                                    d="M9 5l7 7-7 7"
-                                  />
-                                </svg>
+                                {categoryId === "0" && (
+                                  <span
+                                    className={`
+                            px-2.5 py-1 rounded-full text-xs font-medium border
+                            ${getTypeColor("c" + flag.category_id)}
+                          `}
+                                  >
+                                    {categories[flag.category_id]}
+                                  </span>
+                                )}
                               </button>
                             </div>
                           </div>
@@ -435,9 +454,7 @@ function FlagListPageContent() {
                             className={`
               absolute inset-0 
               bg-gradient-to-tr from-gray-100/0 via-gray-100/0 to-gray-100/50
-              transition-opacity duration-300
-              ${hoveredId === flag.i ? "opacity-100" : "opacity-0"}
-            `}
+              transition-opacity duration-300`}
                           />
                         </div>
                       </Link>

@@ -11,10 +11,12 @@ import Image from "next/image";
 import {
   Book,
   Download,
+  FileCog2Icon,
   Github,
   GithubIcon,
   Link2,
   LinkIcon,
+  LucideFlag,
   RefreshCcwDot,
   Send,
   User,
@@ -89,6 +91,24 @@ export default function Footer() {
                       >
                         <RefreshCcwDot className="w-4 h-4 transition-colors" />
                         Updater
+                      </a>
+                    </li>
+                    <li>
+                      <a
+                        href="/library_backup"
+                        className="text-muted-foreground hover:text-foreground flex items-center gap-2 transition-colors group"
+                      >
+                        <FileCog2Icon className="w-4 h-4 transition-colors" />
+                        Backup Library
+                      </a>
+                    </li>
+                    <li>
+                      <a
+                        href="/library_flag"
+                        className="text-muted-foreground hover:text-foreground flex items-center gap-2 transition-colors group"
+                      >
+                        <LucideFlag className="w-4 h-4 transition-colors" />
+                        Flag Library
                       </a>
                     </li>
                     <li>

@@ -21,9 +21,29 @@ import {
   Wrench,
 } from "lucide-react";
 
+interface ResponseScheme {
+  manifest_version: number;
+  status: string;
+  flagSizes: {
+    all: number;
+    direct: number;
+    reels: number;
+    stories: number;
+    feed: number;
+    interface: number;
+    notes: number;
+    quality: number;
+    camera: number;
+    call: number;
+    fixes: number;
+    other: number;
+  };
+}
+
 export default function LibraryBackupPage() {
   const router = useRouter();
   const [hoveredId, setHoveredId] = useState<number | null>(null);
+  const [data, setData] = useState<ResponseScheme | null>(null);
 
   const categories = [
     {
@@ -99,6 +119,16 @@ export default function LibraryBackupPage() {
       color: "teal",
     },
   ];
+  useEffect(() => {
+    const fetchData = async () => {
+      // var requestUrl = `https://stunning-palm-tree-x4j74qgwjvqh664v-3040.app.github.dev/flag_sizes`;
+      var requestUrl = `https://iflagapi.mamiiiblt.me/flag_sizes`;
+      const res = await fetch(requestUrl);
+      const result: ResponseScheme = await res.json();
+      setData(result);
+    };
+    fetchData();
+  }, []);
 
   const handleCategoryClick = (categoryId: number) => {
     router.push(`/flags?category=${categoryId}`);
@@ -189,105 +219,123 @@ export default function LibraryBackupPage() {
 
   return (
     <AnimatePresence>
-      <div className="min-h-screen bg-gray-50 py-12 px-4 sm:px-6 lg:px-8">
-        <div className="max-w-6xl mx-auto">
-          <div className="text-center mb-12">
-            <motion.div
-              initial={{ opacity: 0, y: 30 }}
-              animate={{ opacity: 1, y: 0 }}
-              transition={{
-                duration: 0.8,
-                ease: "easeOut",
-              }}
-              className="bg-gray-600 text-white p-3 rounded-lg inline-block mb-4"
-            >
-              <Flag size={24} />
-            </motion.div>
-            <motion.h2
-              initial={{ opacity: 0, y: 30 }}
-              animate={{ opacity: 1, y: 0 }}
-              transition={{
-                duration: 0.8,
-                ease: "easeInOut",
-              }}
-              className="text-3xl font-bold mb-4"
-            >
-              Flag Library
-            </motion.h2>
-            <motion.p
-              initial={{ opacity: 0, y: 30 }}
-              animate={{ opacity: 1, y: 0 }}
-              transition={{
-                delay: 0.2,
-                duration: 0.8,
-                ease: "easeOut",
-              }}
-              className="text-muted-foreground  max-w-2xl mx-auto"
-            >
-              You can list the flags in any category or all of them if you want.
-              Also you can filter flags in category with add date, author or etc
-              filters.
-            </motion.p>
-          </div>
-
-          <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 gap-4">
-            {categories.map((category) => {
-              const colorClasses = getColorClasses(
-                category.color,
-                hoveredId === category.id
-              );
-
-              return (
+      {data ? (
+        <div>
+          {" "}
+          <div className="min-h-screen bg-gray-50 py-12 px-4 sm:px-6 lg:px-8">
+            <div className="max-w-6xl mx-auto">
+              <div className="text-center mb-12">
                 <motion.div
-                  key={category.id}
                   initial={{ opacity: 0, y: 30 }}
                   animate={{ opacity: 1, y: 0 }}
                   transition={{
-                    delay: 0.4 + category.id * 0.15,
                     duration: 0.8,
                     ease: "easeOut",
                   }}
+                  className="bg-gray-600 text-white p-3 rounded-lg inline-block mb-4"
                 >
-                  <div
-                    onMouseEnter={() => setHoveredId(category.id)}
-                    onMouseLeave={() => setHoveredId(null)}
-                  >
-                    <button
-                      onClick={() => handleCategoryClick(category.id)}
-                      className={`
+                  <Flag size={24} />
+                </motion.div>
+                <motion.h2
+                  initial={{ opacity: 0, y: 30 }}
+                  animate={{ opacity: 1, y: 0 }}
+                  transition={{
+                    duration: 0.8,
+                    ease: "easeInOut",
+                  }}
+                  className="text-3xl font-bold mb-4"
+                >
+                  Flag Library
+                </motion.h2>
+                <motion.p
+                  initial={{ opacity: 0, y: 30 }}
+                  animate={{ opacity: 1, y: 0 }}
+                  transition={{
+                    delay: 0.2,
+                    duration: 0.8,
+                    ease: "easeOut",
+                  }}
+                  className="text-muted-foreground  max-w-2xl mx-auto"
+                >
+                  You can list the flags in any category or all of them if you
+                  want. Also you can filter flags in category with add date,
+                  author or etc filters.
+                </motion.p>
+              </div>
+
+              <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 gap-4">
+                {categories.map((category) => {
+                  const colorClasses = getColorClasses(
+                    category.color,
+                    hoveredId === category.id
+                  );
+
+                  return (
+                    <motion.div
+                      key={category.id}
+                      initial={{ opacity: 0, y: 30 }}
+                      animate={{ opacity: 1, y: 0 }}
+                      transition={{
+                        delay: 0.4 + category.id * 0.15,
+                        duration: 0.8,
+                        ease: "easeOut",
+                      }}
+                    >
+                      <div
+                        onMouseEnter={() => setHoveredId(category.id)}
+                        onMouseLeave={() => setHoveredId(null)}
+                      >
+                        <button
+                          onClick={() => handleCategoryClick(category.id)}
+                          className={`
             w-full p-4 h-[160px]
             flex flex-col items-center justify-center text-center
             rounded-xl border transition-all duration-300
             ${colorClasses.bg} ${colorClasses.text} ${colorClasses.border}
             hover:shadow-lg ${colorClasses.shadow}
           `}
-                    >
-                      <div
-                        className={`
+                        >
+                          <div
+                            className={`
             mb-3 transform transition-transform duration-300
             ${hoveredId === category.id ? "scale-110" : ""}
           `}
-                      >
-                        {category.icon}
-                      </div>
+                          >
+                            {category.icon}
+                          </div>
 
-                      <h3
-                        className={`
+                          <h3
+                            className={`
             font-medium mb-1 transition-colors duration-300
             ${hoveredId === category.id ? "text-white" : "text-gray-900"}
           `}
-                      >
-                        {category.name}
-                      </h3>
-                    </button>
-                  </div>
-                </motion.div>
-              );
-            })}
+                          >
+                            {category.name}
+                          </h3>
+
+                          <div className="mt-2 text-center">
+                            <span
+                              className={`
+                    text-xs font-medium px-2 py-1 rounded-full
+                    ${colorClasses.badge}
+                  `}
+                            >
+                              {data.flagSizes[category.name.toLowerCase()]} Flag
+                            </span>
+                          </div>
+                        </button>
+                      </div>
+                    </motion.div>
+                  );
+                })}
+              </div>
+            </div>
           </div>
+          <Footer />
         </div>
-      </div>
-      <Footer />
+      ) : (
+        <LoadingBar />
+      )}
     </AnimatePresence>
   );
 }
