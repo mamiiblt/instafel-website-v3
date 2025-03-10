@@ -86,8 +86,8 @@ function FlagListPageContent() {
   useEffect(() => {
     setRefreshData(true);
     const fetchData = async () => {
-      // var requestUrl = `https://stunning-palm-tree-x4j74qgwjvqh664v-3040.app.github.dev/list?category=${categoryId}&page=${pageNumber}`;
-      var requestUrl = `https://iflagapi.mamiiblt.me/list?category=${categoryId}&page=${pageNumber}`;
+      var requestUrl = `https://stunning-palm-tree-x4j74qgwjvqh664v-3040.app.github.dev/list?category=${categoryId}&page=${pageNumber}`;
+      // var requestUrl = `https://iflagapi.mamiiblt.me/list?category=${categoryId}&page=${pageNumber}`;
 
       if (paramSelectedUser.trim() != "") {
         requestUrl = requestUrl + `&flName=${paramSelectedUser}`;
