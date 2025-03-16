@@ -56,7 +56,7 @@ interface Flag {
   name: string;
   author: string;
   category_id: number;
-  fnames: string;
+  fnames: string[];
   addate: string;
   rv: number;
   rv_at: string;
@@ -86,7 +86,7 @@ function FlagListPageContent() {
   useEffect(() => {
     setRefreshData(true);
     const fetchData = async () => {
-      var requestUrl = `https://stunning-palm-tree-x4j74qgwjvqh664v-3040.app.github.dev/list?category=${categoryId}&page=${pageNumber}`;
+      var requestUrl = `https://glorious-spoon-7vx9jpprpgpfrxqq-3040.app.github.dev/list?category=${categoryId}&page=${pageNumber}`;
       // var requestUrl = `https://iflagapi.mamiiblt.me/list?category=${categoryId}&page=${pageNumber}`;
 
       if (paramSelectedUser.trim() != "") {
@@ -379,10 +379,17 @@ function FlagListPageContent() {
                                     {flag.name}
                                   </h3>
                                 </div>
-                                <div className="flex items-center gap-3 mb-2">
-                                  <h3 className="text-sm font-regular text-gray-900">
-                                    {flag.fnames}
-                                  </h3>
+                                <div className="mb-2">
+                                  {flag.fnames.map((fname, index) => (
+                                    <div
+                                      key={index}
+                                      className="flex items-center gap-3"
+                                    >
+                                      <h3 className="text-sm font-regular text-gray-900">
+                                        {fname}
+                                      </h3>
+                                    </div>
+                                  ))}
                                 </div>
 
                                 <div className="items-center gap-4 text-sm text-gray-500">
@@ -416,9 +423,9 @@ function FlagListPageContent() {
                                         d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z"
                                       />
                                     </svg>
-                                    Uploaded on{" "}
+                                    Uploaded at{" "}
                                     {new Date(flag.addate).toLocaleDateString(
-                                      "tr-TR"
+                                      "en-US"
                                     )}
                                   </div>
                                   {flag.rv === 1 && (
