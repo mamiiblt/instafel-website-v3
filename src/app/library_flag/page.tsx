@@ -121,7 +121,7 @@ export default function LibraryBackupPage() {
   ];
   useEffect(() => {
     const fetchData = async () => {
-      var requestUrl = `https://stunning-palm-tree-x4j74qgwjvqh664v-3040.app.github.dev/flag_sizes`;
+      var requestUrl = `https://glorious-spoon-7vx9jpprpgpfrxqq-3040.app.github.dev/flag_sizes`;
       // var requestUrl = `https://iflagapi.mamiiblt.me/flag_sizes`;
       const res = await fetch(requestUrl);
       const result: ResponseScheme = await res.json();
